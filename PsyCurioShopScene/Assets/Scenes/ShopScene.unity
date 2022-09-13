@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Cylinder
+  itemName: Cylinder
   price: 8.88
   counter: {fileID: 1313311018}
 --- !u!1 &249967483
@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Sphere
+  itemName: Sphere
   price: 5
   counter: {fileID: 1313311018}
 --- !u!1 &632177536
@@ -812,16 +812,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813590727}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 2.49, z: 1.2}
-  m_LocalScale: {x: 1.5, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1400013088}
   - {fileID: 1817332481}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 2098897489}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &918741068
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,7 +932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Cube
+  itemName: Cube
   price: 11
   counter: {fileID: 1313311018}
 --- !u!1 &961739749
@@ -1080,7 +1080,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975405109}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.4, y: 1.38, z: -0.2}
+  m_LocalPosition: {x: -1.4, y: 1.64, z: -0.2}
   m_LocalScale: {x: 3.4, y: 0.03, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Big M&M
+  itemName: Big M&M
   price: 1
   counter: {fileID: 1313311018}
 --- !u!1 &1189473459
@@ -1521,6 +1521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577f77e6de3afb2499d0b419fec4830f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopkeeper: {fileID: 1709335719}
+  counter: {fileID: 1313311018}
+  zeroItemsBoughtMsg: "You chose: \n\nNothing. Nothing at all.."
 --- !u!1 &1313311013
 GameObject:
   m_ObjectHideFlags: 0
@@ -1642,6 +1645,7 @@ MonoBehaviour:
   - {fileID: 1464528896}
   - {fileID: 768907641}
   - {fileID: 249967484}
+  maxBuyableItems: 0
 --- !u!1 &1400013087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,7 +1895,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5a5c59b33f2cbde4384512525f31757b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.37
+      value: 1.196
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5a5c59b33f2cbde4384512525f31757b,
         type: 3}
@@ -2331,7 +2335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b230490d9cf29428ce344299e0683c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechbubble: {fileID: 813590727}
+  speechbubble: {fileID: 2098897488}
   speechbubbleText: {fileID: 1966099694}
 --- !u!1 &1737570649
 GameObject:
@@ -2444,7 +2448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Capsule
+  itemName: Capsule
   price: 3
   counter: {fileID: 1313311018}
 --- !u!1 &1817332478
@@ -2670,7 +2674,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hello :) \nYou bought:\n1. ysc\n2. asdf\n3. 34fds\n4. asdf\n5. asdlfk\xF6j"
+  m_text: Placeholder text..
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2697,11 +2701,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.08
+  m_fontSize: 0.12
   m_fontSizeBase: 0.12
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 0.08
+  m_fontSizeMin: 0.09
   m_fontSizeMax: 0.12
   m_fontStyle: 0
   m_HorizontalAlignment: 1
@@ -2783,3 +2787,49 @@ Transform:
   m_Father: {fileID: 975405110}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2098897488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2098897489}
+  - component: {fileID: 2098897490}
+  m_Layer: 0
+  m_Name: SpeechBubblePivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2098897489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098897488}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.859, y: 2.365, z: 0.5860001}
+  m_LocalScale: {x: 1.5, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 813590731}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2098897490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098897488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d30236d9364d0644eaeb9838783170b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToLookAt: {fileID: 961739753}

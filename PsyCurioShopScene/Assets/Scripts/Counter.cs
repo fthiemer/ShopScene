@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour {
     [SerializeField] private List<Transform> boughtObjectPositionsOnCounter;
-    
-    private int maxBuyableItems;
+
+    [SerializeField] private int maxBuyableItems;
+    public int MaxBuyableItems => maxBuyableItems;
+
     /// <summary>
     /// Holds the components with information about bought items
     /// </summary>
-    private List<BuyableObject> boughtItems;
+    public List<BuyableObject> BoughtItems { get; private set; }
 
     private void Awake() {
         //Allow to place as many items, as there are positions on the counter
         maxBuyableItems = boughtObjectPositionsOnCounter.Count;
-        boughtItems = new List<BuyableObject>();
+        BoughtItems = new List<BuyableObject>();
     }
 
     /// <summary>
@@ -22,15 +24,15 @@ public class Counter : MonoBehaviour {
     /// </summary>
     /// <param name="boughtItem"></param>
     public void PlaceOnCounter(GameObject boughtItem) {
-        if (boughtItems.Count >= maxBuyableItems) return;
-        // Get BuyableObject component for cash register
+        if (BoughtItems.Count >= MaxBuyableItems) return;
+        // Get BuyableObject component for later cash register use
         var curBuyableObject = boughtItem.GetComponent<BuyableObject>();
-        boughtItems.Add(curBuyableObject);
-        //Place Object with fitting offset
+        BoughtItems.Add(curBuyableObject);
+        //Clone and place Object with fitting offset
         Vector3 curOffset = new Vector3(0f, curBuyableObject.YOffset, 0f);
-        Vector3 targetPos = boughtObjectPositionsOnCounter[boughtItems.Count - 1].position + curOffset;
+        Vector3 targetPos = boughtObjectPositionsOnCounter[BoughtItems.Count - 1].position + curOffset;
         GameObject tmpPlacedObject = Instantiate(boughtItem, targetPos, Quaternion.identity);
-        //Remove BuyableObject component, so the object on the counter is not clickable
+        //Remove BuyableObject component, so the object on the counter cant trigger a new buy
         var componentToRemove = tmpPlacedObject.GetComponent<BuyableObject>();
         Destroy(componentToRemove);
     }

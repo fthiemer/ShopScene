@@ -10,8 +10,8 @@ public class BuyableObject : MonoBehaviour {
     /// </summary>
     public float YOffset { get; private set; }
 
-    [SerializeField] private string name;
-    public string Name { get { return name; } }
+    [SerializeField] private string itemName;
+    public string ItemName { get { return itemName; } }
     
     [SerializeField] private float price;
     public float Price { get { return price; } }
@@ -26,6 +26,6 @@ public class BuyableObject : MonoBehaviour {
 
     private void OnMouseDown() {
         counter.PlaceOnCounter(gameObject);
-        Debug.Log($"Bought {Name} for {Price}");
+        Debug.Log($"Bought {ItemName} for {Price}");
     }
 }

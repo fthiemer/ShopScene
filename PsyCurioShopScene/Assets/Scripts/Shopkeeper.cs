@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShopKeeper : MonoBehaviour {
+public class Shopkeeper : MonoBehaviour {
     [SerializeField] private GameObject speechbubble;
     [SerializeField] private TMPro.TMP_Text speechbubbleText;
 
