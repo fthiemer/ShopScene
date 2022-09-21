@@ -1,5 +1,9 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for Shopkeeper Animations, speechbubble text & activation.
+/// </summary>
 public class Shopkeeper : MonoBehaviour {
     [SerializeField] private GameObject speechbubble;
     [SerializeField] private TMPro.TMP_Text speechbubbleText;
@@ -19,7 +23,7 @@ public class Shopkeeper : MonoBehaviour {
     }
     
     /// <summary>
-    /// Display text on the Speechbubble.
+    /// Activate the Speechbubble and display given string on it.
     /// </summary>
     /// <param name="text"></param>
     public void Say(string text) {
@@ -40,6 +44,7 @@ public class Shopkeeper : MonoBehaviour {
     /// <summary>
     /// Transition back to idle animation. Is triggered by the event trigger on the Waving animation.
     /// </summary>
+    [UsedImplicitly]
     private void TransitionToIdle() {
         _isWaving = false;
         _animator.CrossFadeInFixedTime("Neutral Idle", 0.8f);
