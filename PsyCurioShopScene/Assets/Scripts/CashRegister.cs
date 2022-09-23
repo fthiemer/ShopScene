@@ -11,15 +11,7 @@ public class CashRegister : MonoBehaviour
     [SerializeField] private Shopkeeper shopkeeper;
     [SerializeField] private Counter counter;
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
-    
-    /// <summary>
-    /// List of praising attributes used randomly by the shopkeeper to
-    /// describe items.
-    /// </summary>
-    private string[] _praisingAttributesList = new[]
-        { "philosophical", "lightning-fast", "elegant", "magic", 
-            "prestigious", "adventurous", "mystical", "fresh"};
-    
+
     private void OnMouseDown() {
         shopkeeper.Say(MakeBillMessage());
     }
@@ -55,7 +47,7 @@ public class CashRegister : MonoBehaviour
             float curItemPrice = itemCountDict[key].Item2;
             itemSuffix = curItemCount == 1 ? "" : "s";
             int praiseIndex = Random.Range(0, counter.MaxBuyableItems);
-            billText.Append($"{curItemCount} {_praisingAttributesList[praiseIndex]} {key}{itemSuffix}" +
+            billText.Append($"{curItemCount} {key}{itemSuffix}" +
                             $" for {curItemCount * curItemPrice}!!\n");
         }
         string summaryWord = counter.BoughtItems.Count == 1 ? "it" : "everything";
