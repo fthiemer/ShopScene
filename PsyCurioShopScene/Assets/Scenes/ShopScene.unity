@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 233421616}
   m_Layer: 3
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 599116277}
   m_Layer: 3
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -838,7 +838,7 @@ GameObject:
   - component: {fileID: 918741073}
   m_Layer: 3
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1314,7 +1314,7 @@ GameObject:
   - component: {fileID: 1180333850}
   m_Layer: 3
   m_Name: FlatSphere
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1427,7 +1427,7 @@ GameObject:
   - component: {fileID: 1189473464}
   m_Layer: 0
   m_Name: Cash Register
-  m_TagString: Untagged
+  m_TagString: CashRegister
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1540,7 +1540,7 @@ GameObject:
   - component: {fileID: 1313311018}
   m_Layer: 0
   m_Name: Counter
-  m_TagString: Untagged
+  m_TagString: Counter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1640,13 +1640,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32cd0c0e19099ac459e0adc5eebed6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boughtObjectPositionsOnCounter:
-  - {fileID: 632177537}
-  - {fileID: 443340382}
-  - {fileID: 1464528896}
-  - {fileID: 768907641}
-  - {fileID: 249967484}
-  maxBuyableItems: 5
 --- !u!1 &1400013087
 GameObject:
   m_ObjectHideFlags: 0
@@ -2142,6 +2135,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5a5c59b33f2cbde4384512525f31757b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Shopkeeper
+      objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: 5a5c59b33f2cbde4384512525f31757b,
         type: 3}
       propertyPath: m_Layer
@@ -2353,7 +2351,7 @@ GameObject:
   - component: {fileID: 1737570654}
   m_Layer: 3
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2630,7 +2628,7 @@ GameObject:
   - component: {fileID: 1966099694}
   m_Layer: 0
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: SpeechbubbleTMP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class Counter : MonoBehaviour {
     private List<Transform> boughtItemTargetPositions;
     private int maxBuyableItems;
@@ -13,6 +13,7 @@ public class Counter : MonoBehaviour {
     public List<BuyableObject> BoughtItems { get; private set; }
 
     private void Awake() {
+        gameObject.tag = Tags.Counter;
         //Allow to place as many items, as there are positions on the counter,
         // as indicated by targetPosition gameObjects, which are child to the counter
         maxBuyableItems = gameObject.transform.childCount;

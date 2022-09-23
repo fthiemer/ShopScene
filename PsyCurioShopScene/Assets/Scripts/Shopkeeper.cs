@@ -15,6 +15,7 @@ public class Shopkeeper : MonoBehaviour {
     private bool _isWaving;
 
     private void Awake() {
+        gameObject.tag = Tags.Shopkeeper;
         _animator = GetComponent<Animator>();
     }
 
@@ -49,6 +50,4 @@ public class Shopkeeper : MonoBehaviour {
         _isWaving = false;
         _animator.CrossFadeInFixedTime("Neutral Idle", 0.8f);
     }
-
-
 }

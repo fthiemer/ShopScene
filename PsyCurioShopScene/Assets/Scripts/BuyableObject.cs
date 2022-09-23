@@ -2,12 +2,10 @@ using UnityEngine;
 
 /// <summary>
 /// Holds item information and triggers placement on counter on click.
-/// Needs to be attached to an item to make it buyable.
+/// Attach it to a GameObject to make the GameObject buyable.
 /// </summary>
 [RequireComponent(typeof(MeshRenderer))]
 public class BuyableObject : MonoBehaviour {
-
-
     /// <summary>
     /// The distance between center and lower edge. Used for correct placement on the counter.
     /// </summary>
@@ -23,6 +21,7 @@ public class BuyableObject : MonoBehaviour {
 
 
     private void Awake() {
+        gameObject.tag = Tags.Item;
         var tmpMeshFilter = gameObject.GetComponent<MeshRenderer>();
         YOffset = tmpMeshFilter.bounds.extents.y;
     }

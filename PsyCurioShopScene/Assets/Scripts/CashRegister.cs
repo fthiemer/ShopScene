@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Creates bill message on click and lets shopkeeper say it.
@@ -12,6 +14,10 @@ public class CashRegister : MonoBehaviour
     [SerializeField] private Counter counter;
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
 
+    private void Awake() {
+        gameObject.tag = Tags.CashRegister;
+    }
+    
     private void OnMouseDown() {
         shopkeeper.Say(MakeBillMessage());
     }
