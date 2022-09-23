@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Counter : MonoBehaviour {
-    [SerializeField] private List<Transform> boughtObjectPositionsOnCounter;
-
-    [SerializeField] private int maxBuyableItems;
+    private List<Transform> boughtItemTargetPositions;
+    private int maxBuyableItems;
     public int MaxBuyableItems => maxBuyableItems;
 
     /// <summary>
@@ -13,8 +13,13 @@ public class Counter : MonoBehaviour {
     public List<BuyableObject> BoughtItems { get; private set; }
 
     private void Awake() {
-        //Allow to place as many items, as there are positions on the counter
-        maxBuyableItems = boughtObjectPositionsOnCounter.Count;
+        //Allow to place as many items, as there are positions on the counter,
+        // as indicated by targetPosition gameObjects, which are child to the counter
+        maxBuyableItems = gameObject.transform.childCount;
+        boughtItemTargetPositions = new List<Transform>(maxBuyableItems);
+        for (int i = 0; i < maxBuyableItems; i++) {
+            boughtItemTargetPositions.Add(transform.GetChild(i));
+        }
         BoughtItems = new List<BuyableObject>();
     }
 
@@ -29,7 +34,7 @@ public class Counter : MonoBehaviour {
         BoughtItems.Add(curBuyableObject);
         //Clone and place Object with fitting offset
         Vector3 curOffset = new Vector3(0f, curBuyableObject.YOffset, 0f);
-        Vector3 targetPos = boughtObjectPositionsOnCounter[BoughtItems.Count - 1].position + curOffset;
+        Vector3 targetPos = boughtItemTargetPositions[BoughtItems.Count - 1].position + curOffset;
         GameObject tmpPlacedObject = Instantiate(boughtItem, targetPos, Quaternion.identity);
         //Remove BuyableObject component, so the object on the counter cant trigger a new buy
         var componentToRemove = tmpPlacedObject.GetComponent<BuyableObject>();
