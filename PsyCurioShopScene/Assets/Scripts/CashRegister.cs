@@ -10,14 +10,19 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class CashRegister : MonoBehaviour
 {
-    [SerializeField] private Shopkeeper shopkeeper;
-    [SerializeField] private Counter counter;
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
+    private Counter counter;
+    private Shopkeeper shopkeeper;
 
     private void Awake() {
         gameObject.tag = Tags.CashRegister;
     }
-    
+
+    private void Start() {
+        counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
+        shopkeeper = GameObject.FindWithTag(Tags.Shopkeeper)?.GetComponent<Shopkeeper>();
+    }
+
     private void OnMouseDown() {
         shopkeeper.Say(MakeBillMessage());
     }

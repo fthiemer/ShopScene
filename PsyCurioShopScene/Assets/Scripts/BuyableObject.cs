@@ -17,13 +17,17 @@ public class BuyableObject : MonoBehaviour {
     [SerializeField] private float price;
     public float Price => price;
 
-    [SerializeField] private Counter counter;
+    private Counter counter;
 
 
     private void Awake() {
         gameObject.tag = Tags.Item;
         var tmpMeshFilter = gameObject.GetComponent<MeshRenderer>();
         YOffset = tmpMeshFilter.bounds.extents.y;
+    }
+
+    private void Start() {
+        counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
     }
     
     private void OnMouseDown() {
