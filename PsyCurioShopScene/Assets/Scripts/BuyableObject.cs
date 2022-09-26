@@ -16,9 +16,9 @@ public class BuyableObject : MonoBehaviour {
 
     [SerializeField] private float price;
     public float Price => price;
-
     private Counter counter;
-
+    private bool isAlreadyBought;
+    public bool IsAlreadyBought => isAlreadyBought;
 
     private void Awake() {
         gameObject.tag = Tags.Item;
@@ -31,7 +31,13 @@ public class BuyableObject : MonoBehaviour {
     }
     
     private void OnMouseDown() {
+        //Only react to click, if item was bought
+        if (isAlreadyBought) return; 
         counter.PlaceOnCounter(gameObject);
         Debug.Log($"Bought {ItemName} for {Price}");
+    }
+
+    public void Buy() {
+        isAlreadyBought = true;
     }
 }
