@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class Counter : MonoBehaviour {
+public class Counter : MonoBehaviour, ICounter {
     private List<Transform> boughtItemTargetPositions;
     private int maxBuyableItems;
     public int MaxBuyableItems => maxBuyableItems;

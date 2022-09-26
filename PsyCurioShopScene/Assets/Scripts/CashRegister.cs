@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 public class CashRegister : MonoBehaviour
 {
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
-    private Counter counter;
+    private ICounter counter;
     private Shopkeeper shopkeeper;
 
     private void Awake() {

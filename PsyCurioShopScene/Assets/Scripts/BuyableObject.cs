@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -16,9 +17,10 @@ public class BuyableObject : MonoBehaviour {
 
     [SerializeField] private float price;
     public float Price => price;
-    private Counter counter;
-    private bool isAlreadyBought;
     public bool IsAlreadyBought => isAlreadyBought;
+    public ICounter ICounter { get; set; }
+
+    private bool isAlreadyBought;
 
     private void Awake() {
         gameObject.tag = Tags.Item;
@@ -27,13 +29,13 @@ public class BuyableObject : MonoBehaviour {
     }
 
     private void Start() {
-        counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
+        ICounter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
     }
     
     private void OnMouseDown() {
         //Only react to click, if item was bought
         if (isAlreadyBought) return; 
-        counter.PlaceOnCounter(gameObject);
+        ICounter.PlaceOnCounter(gameObject);
         Debug.Log($"Bought {ItemName} for {Price}");
     }
 
