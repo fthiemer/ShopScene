@@ -4,4 +4,5 @@ public static class Tags {
     public const string Shopkeeper = "Shopkeeper";
     public const string Item = "Item";
     public const string CashRegister = "CashRegister";
+    public const string MainCamera = "MainCamera";
 }

@@ -10,7 +10,7 @@ namespace Tests.EditMode {
     /// https://stackoverflow.com/questions/672501/is-there-an-easy-way-to-use-internalsvisibletoattribute
     /// and https://stackoverflow.com/questions/249847/how-do-you-test-private-methods-with-nunit 
     /// </summary>
-    public static class test_helper {
+    public static class reflection_helper {
         /// <summary>
         /// Invoke non-public method with methodName on given instance.
         /// Attention: Does only work on instances of classes

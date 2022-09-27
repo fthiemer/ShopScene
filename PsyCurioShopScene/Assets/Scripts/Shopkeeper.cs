@@ -1,10 +1,11 @@
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Responsible for Shopkeeper Animations, speechbubble text & activation.
 /// </summary>
-public class Shopkeeper : MonoBehaviour {
+public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
     [SerializeField] private GameObject speechbubble;
     [SerializeField] private TMPro.TMP_Text speechbubbleText;
 
@@ -19,7 +20,7 @@ public class Shopkeeper : MonoBehaviour {
         _animator = GetComponent<Animator>();
     }
 
-    private void OnMouseDown() {
+    public void OnPointerClick (PointerEventData eventData) {
         Wave();
     }
     
