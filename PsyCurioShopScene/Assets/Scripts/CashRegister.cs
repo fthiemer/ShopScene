@@ -37,12 +37,13 @@ public class CashRegister : MonoBehaviour
         float totalPrice = 0f;
         //Count occurences of items in dict and calculate price
         //Store name -> (pieces bought, price of one instance) in dict
-        var itemCountDict = new Dictionary<string, (int, float)>(5); 
+        var itemCountDict = new Dictionary<string, (int, float)>(counter.MaxBuyableItems); 
         foreach (BuyableObject buyableObject in counter.BoughtItems) {
             var tmpName = buyableObject.ItemName;
             if(itemCountDict.ContainsKey(tmpName)) {
                 var countPriceTuple = itemCountDict[tmpName];
                 countPriceTuple.Item1 += 1;
+                itemCountDict[tmpName] = countPriceTuple;
             } else {
                 itemCountDict.Add(tmpName, (1, buyableObject.Price));
             }
@@ -56,7 +57,6 @@ public class CashRegister : MonoBehaviour
             int curItemCount = itemCountDict[key].Item1;
             float curItemPrice = itemCountDict[key].Item2;
             itemSuffix = curItemCount == 1 ? "" : "s";
-            int praiseIndex = Random.Range(0, counter.MaxBuyableItems);
             billText.Append($"{curItemCount} {key}{itemSuffix}" +
                             $" for {curItemCount * curItemPrice}!!\n");
         }
