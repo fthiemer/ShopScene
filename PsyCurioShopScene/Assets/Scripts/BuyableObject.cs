@@ -18,24 +18,24 @@ public class BuyableObject : MonoBehaviour {
     [SerializeField] private float price;
     public float Price => price;
     public bool IsAlreadyBought => isAlreadyBought;
-    public ICounter ICounter { get; set; }
+    public ICounter Counter { get; set; }
 
     private bool isAlreadyBought;
 
     private void Awake() {
         gameObject.tag = Tags.Item;
-        var tmpMeshFilter = gameObject.GetComponent<MeshRenderer>();
-        YOffset = tmpMeshFilter.bounds.extents.y;
+        var meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        YOffset = meshRenderer.bounds.extents.y;
     }
 
     private void Start() {
-        ICounter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
+        Counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
     }
     
     private void OnMouseDown() {
         //Only react to click, if item was bought
         if (isAlreadyBought) return; 
-        ICounter.PlaceOnCounter(gameObject);
+        Counter.PlaceOnCounter(gameObject);
         Debug.Log($"Bought {ItemName} for {Price}");
     }
 

@@ -23,13 +23,17 @@ namespace Tests.EditMode {
             EditorSceneManager.OpenScene("Assets/Scenes/ShopScene.unity", OpenSceneMode.Single);
             counterObject = GameObject.FindWithTag(Tags.Counter);
             counterComponent = counterObject.GetComponent<Counter>();
+            test_helper.InvokePrivateMethod(counterComponent, "Awake");
             buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
+            foreach (var buyableItem in buyableItems) {
+                
+            }
         }
     
         [Test]
         public void max_buyable_items_equals_number_of_child_objects_after_awake() {
             //ARRANGE -> happens in OneTimeSetUp()
-            //ACT -> happens in OneTimeSetUp(), when Awake of the Counter component is called (thus Counter is [ExecuteAlways])
+            //ACT -> Awake call in OneTimeSetUp()
             //ASSERT
             Assert.AreEqual(counterObject.transform.childCount, counterComponent.MaxBuyableItems);
         }    
@@ -37,7 +41,7 @@ namespace Tests.EditMode {
         [Test]
         public void max_buyable_items_equals_5_after_awake() {
             //ARRANGE -> happens in OneTimeSetUp()
-            //ACT -> happens in OneTimeSetUp(), when Awake of the Counter component is called (thus Counter is [ExecuteAlways])
+            //ACT -> Awake call in OneTimeSetUp()
             //ASSERT
             Assert.AreEqual(5, counterComponent.MaxBuyableItems);
         }
@@ -180,8 +184,9 @@ namespace Tests.EditMode {
         /// </summary>
         private void ResetCounterComponent() {
             Object.DestroyImmediate(counterComponent);
-            counterObject.AddComponent<Counter>(); //This calls the components Awake()
+            counterObject.AddComponent<Counter>();
             counterComponent = counterObject.GetComponent<Counter>();
+            test_helper.InvokePrivateMethod(counterComponent, "Awake");
         }
     }
 }

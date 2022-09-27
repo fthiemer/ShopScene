@@ -23,7 +23,7 @@ namespace Tests.EditMode {
         private BuyableObject[] buyableObjectComponents;
 
         /// <summary>
-        /// Load ShopScene and put a substitute into all ICounter fields, so all calls to its methods
+        /// Load ShopScene and put a substitute into all Counter fields, so all calls to its methods
         /// can be monitored.
         /// </summary>
         [OneTimeSetUp]
@@ -32,34 +32,96 @@ namespace Tests.EditMode {
             buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
             colliders = buyableItems.Select(x => x.GetComponent<Collider>()).ToArray();
             buyableObjectComponents = buyableItems.Select(x => x.GetComponent<BuyableObject>()).ToArray();
-            // Replace ICounter component of every item with substitute, so that it can be tested for received calls
+            // Replace Counter component of every item with substitute, so that it can be tested for received calls
             for (var i = 0; i < buyableObjectComponents.Length; i++) {
                 var buyableObjectComponent = buyableObjectComponents[i];
+                //Call Awake, as it would not be called in edit mode
+                test_helper.InvokePrivateMethod(buyableObjectComponent, "Awake");
                 var counterSubstitute = Substitute.For<ICounter>();
-                buyableObjectComponent.ICounter = counterSubstitute;
-                buyableObjectComponent.ICounter.PlaceOnCounter(buyableItems[i])
+                buyableObjectComponent.Counter = counterSubstitute;
+                // Give PlaceOnCounter() return behaviour, as if it always places the item
+                buyableObjectComponent.Counter.PlaceOnCounter(buyableItems[i])
                     .Returns(buyableItems[i]);
             }
         }
 
+        /// <summary>
+        /// Make sure, all items are clickable in current scene.
+        /// Do so by simulating mouse click on their center
+        /// </summary>
+        [UnityTest]
+        public IEnumerator mouse_click_on_items_calls_ICounter_PlaceOnCounter() {
+            //ARRANGE - somehow get usable mouse prepared
+            //ACT - click on screen pos, that correlates to world pos
+            //var mouse = InputSystem.AddDevice<Mouse
+            yield return null;
+            //ASSERT - take from below
+        }
+        
+        
         [Test]
-        public void PlaceBuyableObject_is_called_when_OnMouseDown_is_triggered() {
-            //ARRANGE - happens in OneTimeSetup()
+        public void OnMouseDown_triggers_ICounter_PlaceOnCounter() {
+            //ARRANGE - see OneTimeSetup()
             
             for (int i=0; i<buyableItems.Length; i++) {
                 //ACT
-                    //trigger OnMouseDown event
-                    // Code taken from https://stackoverflow.com/questions/672501/is-there-an-easy-way-to-use-internalsvisibletoattribute
-                    // and https://stackoverflow.com/questions/249847/how-do-you-test-private-methods-with-nunit
-                var onMouseDown = buyableObjectComponents[i].GetType().GetMethod("OnMouseDown", 
-                    BindingFlags.NonPublic | BindingFlags.Instance);
-                onMouseDown.Invoke(buyableObjectComponents[i], null);
-                
-                // Hm, stellt sicher, dass Implementierung sich nicht ändert. Aber ist das das Ziel eines Tests?
-                
+                // call private OnMouseDown function of current BuyableObject component
+                test_helper.InvokePrivateMethod(buyableObjectComponents[i], "OnMouseDown");
+
                 //ASSERT
-                    //Use Received method of Substitute to confirm exactly one call to PlaceOnCounter
-                buyableObjectComponents[i].ICounter.Received(1).PlaceOnCounter(buyableItems[i]);
+                //Use Received method of Substitute to confirm exactly one call to PlaceOnCounter
+                buyableObjectComponents[i].Counter.Received(1).PlaceOnCounter(buyableItems[i]);
+                //CLEANUP
+                buyableObjectComponents[i].Counter.ClearReceivedCalls();
+            }
+        }
+
+
+        [Test]
+        public void Awake_sets_yOffset_to_half_y_bounds() {
+            //ARRANGE - Happened in OneTimeSetup()
+            for (var i = 0; i < buyableObjectComponents.Length; i++) {
+                //ACT - not neccessary, Awake called in OneTimeSetup
+                //ASSERT
+                float actualYOffset = buyableObjectComponents[i].YOffset;
+                float expectedYOffset = buyableItems[i].GetComponent<MeshRenderer>().bounds.extents.y;
+                Assert.AreEqual(expectedYOffset, actualYOffset);
+            }
+        }
+
+        [Test]
+        public void Buy_sets_isAlreadyBought_to_true() {
+            //ARRANGE - happens in OneTimeSetup()
+            for (int i = 0; i < buyableItems.Length; i++) {
+                var curComponent = buyableObjectComponents[i];
+                //ACT - call Buy
+                curComponent.Buy();
+                //ASSERT
+                Assert.IsTrue(curComponent.IsAlreadyBought);
+                //CLEANUP
+                test_helper.SetPrivateBoolField(curComponent, "isAlreadyBought", false);
+                Assert.IsFalse(curComponent.IsAlreadyBought);
+            }
+        }
+
+        [Test]
+        public void Buy_prevents_PlaceOnCounter_call_on_following_OnMouseDown_call() {
+            //ARRANGE - happens in OneTimeSetup()
+            for (int i = 0; i < buyableItems.Length; i++) {
+                var curComponent = buyableObjectComponents[i];
+                //ACT 1 - call Buy
+                curComponent.Buy();
+
+                //ACT 2 - call private OnMouseDown of curComponent
+                test_helper.InvokePrivateMethod(curComponent, "OnMouseDown");
+
+                //ASSERT
+                //Use Received method of Substitute to confirm ZERO calls to PlaceOnCounter
+                curComponent.Counter.Received(0).PlaceOnCounter(buyableItems[i]);
+                //CLEANUP
+                curComponent.Counter.ClearReceivedCalls();
+                test_helper.SetPrivateBoolField(curComponent, "isAlreadyBought", false);
+                Assert.IsFalse(curComponent.IsAlreadyBought);
             }
         }
     }
