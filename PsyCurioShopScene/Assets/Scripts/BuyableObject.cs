@@ -1,12 +1,13 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 /// <summary>
 /// Holds item information and triggers placement on counter on click.
 /// Attach it to a GameObject to make the GameObject buyable.
 /// </summary>
 [RequireComponent(typeof(MeshRenderer))]
-public class BuyableObject : MonoBehaviour {
+public class BuyableObject : MonoBehaviour, IPointerClickHandler {
     /// <summary>
     /// The distance between center and lower edge. Used for correct placement on the counter.
     /// </summary>
@@ -31,8 +32,8 @@ public class BuyableObject : MonoBehaviour {
     private void Start() {
         Counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
     }
-    
-    private void OnMouseDown() {
+
+    public void OnPointerClick (PointerEventData eventData) {
         //Only react to click, if item was bought
         if (isAlreadyBought) return; 
         Counter.PlaceOnCounter(gameObject);

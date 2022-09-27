@@ -8,8 +8,7 @@
         "Unity.Addressables",
         "Unity.ResourceManager",
         "Unity.InputSystem",
-        "Unity.InputSystem.TestFramework",
-        "Unity.InputSystem.IntegrationTests"
+        "Unity.InputSystem.TestFramework"
     ],
     "includePlatforms": [
         "Editor"

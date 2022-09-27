@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Creates bill message on click and lets shopkeeper say it.
 /// Needs to access counter for list of bought items.
 /// </summary>
-public class CashRegister : MonoBehaviour
-{
+public class CashRegister : MonoBehaviour, IPointerClickHandler {
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
     private ICounter counter;
     private Shopkeeper shopkeeper;
@@ -22,7 +21,7 @@ public class CashRegister : MonoBehaviour
         shopkeeper = GameObject.FindWithTag(Tags.Shopkeeper)?.GetComponent<Shopkeeper>();
     }
 
-    private void OnMouseDown() {
+    public void OnPointerClick (PointerEventData eventData) {
         shopkeeper.Say(MakeBillMessage());
     }
 
