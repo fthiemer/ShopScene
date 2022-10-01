@@ -39,7 +39,7 @@ public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
     private void Wave() {
         // Only start waving, when not waving at the moment
         if (_isWaving) return;
-        _animator.CrossFadeInFixedTime("Waving", 0.25f);
+        _animator.CrossFadeInFixedTime("Waving", 0.3f);
         _isWaving = true;
     }
 
