@@ -2411,6 +2411,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speechbubble: {fileID: 813590727}
   speechbubbleText: {fileID: 1966099694}
+  toWaveTransitionDuration: 0.3
+  toIdleTransitionDuration: 0.8
 --- !u!4 &1737570650 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1612252974965819797, guid: 5c8651eb8ab17e746955fbd04b375d94,
