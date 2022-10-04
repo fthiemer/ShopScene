@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -19,15 +20,10 @@ namespace Tests.PlayMode {
         private bool referencesAreSetUp;
         private int usedLayerIndex;
         private Vector3 shopkeeperClickPos;
-
-        [OneTimeSetUp]
-        public void OneTimeSetup() {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene("Assets/Scenes/ShopScene.unity");
-        }
+        private Mouse mouse;
 
         /// <summary>
-        /// Set sceneLoaded to true, so tests can use WaitUntil and OneTimeSetup can be used to load scene
+        /// Set sceneLoaded to true, so tests can use WaitUntil and SetUp can be used to load scene
         /// even though its not an IEnumerator.
         /// </summary>
         /// <param name="scene"></param>
@@ -35,12 +31,27 @@ namespace Tests.PlayMode {
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadingMode) {
             sceneIsLoaded = true;
         }
+
+        [SetUp]
+        public void SetUp() {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene("Assets/Scenes/ShopScene.unity", LoadSceneMode.Single);
+            base.Setup();
+            mouse = InputSystem.AddDevice<Mouse>();
+        }
+
+        [TearDown]
+        public void TearDown() {
+            base.TearDown();
+            sceneIsLoaded = false;
+            referencesAreSetUp = false;
+        }
         
         
         /// <summary>
         /// Non-Input System related setup. Depends on the scene already being loaded
         /// </summary>
-        private void SetUpCommonReferences() {
+        private void SetUpSharedReferences() {
             if (referencesAreSetUp) return;
             //get camera object
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
@@ -62,7 +73,7 @@ namespace Tests.PlayMode {
         public IEnumerator Shopkeeper_starts_with_idle_animation() {
             //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
-            SetUpCommonReferences();
+            SetUpSharedReferences();
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
         }
         
@@ -71,9 +82,9 @@ namespace Tests.PlayMode {
         public IEnumerator Single_Click_on_Shopkeeper_triggers_Wave_Animation_transitioning_to_idle_on_end() {
             //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
-            SetUpCommonReferences();
-            //ARRANGE 2 - Prepare mouse
-            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            SetUpSharedReferences();
+            Assert.IsFalse(shopkeeperComponent.IsWaving);
+            Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
             
             //ACT - Click on Shopkeeper
             Vector2 screenPos = camera.WorldToScreenPoint(shopkeeperClickPos);
@@ -84,17 +95,47 @@ namespace Tests.PlayMode {
             yield return null;
 
             //ASSERT 1 - Waving Animation is played after transition time
-            yield return new WaitForSeconds(shopkeeperComponent.ToWaveTransitionDuration);
-            yield return new WaitUntil(() => !shopkeeperAnimator.IsInTransition(usedLayerIndex));
-            var curAnimatorState = shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex);
-            Assert.IsTrue(curAnimatorState.IsName("Waving"));
+            yield return new WaitForSeconds(shopkeeperComponent.ToWaveTransitionDuration + 0.05f);
+            Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Waving"));
             
             //ASSERT 2 - Idle Animation is played after transition time
             //  wait for Waving Animation to finish
             yield return new WaitUntil(animationFinished);
-            yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration);
-            curAnimatorState = shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex);
-            Assert.IsTrue(curAnimatorState.IsName("Idle"));
+            yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration + 0.05f);
+            Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
+        }
+        
+        [UnityTest]
+        public IEnumerator Clicks_on_Shopkeeper_in_Wave_Animation_dont_restart_Wave_Animation() {
+            //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+
+            //ACT 1 - Click on Shopkeeper and start Waving animation
+            Vector2 screenPos = camera.WorldToScreenPoint(shopkeeperClickPos);
+            Set(mouse.position, screenPos, queueEventOnly: false);
+            Press(mouse.leftButton);
+            yield return null;
+            Release(mouse.leftButton);
+            yield return new WaitForSeconds(shopkeeperComponent.ToWaveTransitionDuration + 0.05f);
+            Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Waving"));
+            
+            //ACT 2 - Repeatedly click shopkeeper during Waving animation until transition happens
+            // as long as animator does not transition to next animation and current animation is not finished
+            while (!shopkeeperAnimator.IsInTransition(usedLayerIndex) && 
+                   shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).normalizedTime % 1f < 0.95f) {
+                // click - This part of code cant be extracted as method without breaking the test for some reason :/
+                Set(mouse.position, screenPos, queueEventOnly: false);
+                Press(mouse.leftButton);
+                yield return null;
+                Release(mouse.leftButton);
+                yield return null;
+            }
+            
+            // ASSERT - Make sure transition is to idle not waving again
+            yield return new WaitUntil(animationFinished);
+            yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration + 0.05f);
+            Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
         }
     }
 }

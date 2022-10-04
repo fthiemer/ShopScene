@@ -22,6 +22,7 @@ public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
 
     // Animation control
     private bool isWaving;
+    public bool IsWaving => isWaving;
     private int baseLayerIndex;
 
     private void Awake() {
