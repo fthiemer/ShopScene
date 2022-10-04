@@ -9,18 +9,17 @@ using UnityEngine.EventSystems;
 /// Responsible for Shopkeeper Animations, speechbubble text & activation.
 /// </summary>
 public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
+    public float ToWaveTransitionDuration => toWaveTransitionDuration;
+    public float ToIdleTransitionDuration => toIdleTransitionDuration;
+    
     [SerializeField] private GameObject speechbubble;
     [SerializeField] private TMPro.TMP_Text speechbubbleText;
     [SerializeField] private float toWaveTransitionDuration = 0.3f;
     [SerializeField] private float toIdleTransitionDuration = 0.8f;
 
-    public float ToWaveTransitionDuration => toWaveTransitionDuration;
-    public float ToIdleTransitionDuration => toIdleTransitionDuration;
-
-    private Animator animator;
-    private AnimationClip wave, idle;
 
     // Animation control
+    private Animator animator;
     private bool isWaving;
     public bool IsWaving => isWaving;
     private int baseLayerIndex;

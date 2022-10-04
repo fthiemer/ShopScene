@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 namespace Tests.PlayMode {
-    public class shopkeeper : InputTestFixture {
+    public class shopkeeper_play_mode : InputTestFixture {
         private Camera camera;
         private bool sceneIsLoaded;
         private GameObject shopkeeperObject;
@@ -57,7 +57,7 @@ namespace Tests.PlayMode {
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
             shopkeeperObject = GameObject.FindWithTag(Tags.Shopkeeper);
             shopkeeperComponent = shopkeeperObject.GetComponent<Shopkeeper>();
-            // Set position to click at the upper body of the shopkeeper
+            // Set position to click at the upper body of the Shopkeeper
             var shopKeeperYPos = 1.5f * shopkeeperObject.GetComponent<Collider>().bounds.extents.y;
             var tmpPos = shopkeeperObject.transform.position;
             shopkeeperClickPos = new Vector3(tmpPos.x, shopKeeperYPos, tmpPos.z);
@@ -106,7 +106,7 @@ namespace Tests.PlayMode {
         }
         
         [UnityTest]
-        public IEnumerator Clicks_on_Shopkeeper_in_Wave_Animation_dont_restart_Wave_Animation() {
+        public IEnumerator repeated_clicks_on_waving_shopkeeper_dont_restart_Wave_Animation() {
             //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
@@ -120,7 +120,7 @@ namespace Tests.PlayMode {
             yield return new WaitForSeconds(shopkeeperComponent.ToWaveTransitionDuration + 0.05f);
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Waving"));
             
-            //ACT 2 - Repeatedly click shopkeeper during Waving animation until transition happens
+            //ACT 2 - Repeatedly click Shopkeeper during Waving animation until transition happens
             // as long as animator does not transition to next animation and current animation is not finished
             while (!shopkeeperAnimator.IsInTransition(usedLayerIndex) && 
                    shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).normalizedTime % 1f < 0.95f) {
@@ -137,5 +137,7 @@ namespace Tests.PlayMode {
             yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration + 0.05f);
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
         }
+        
+
     }
 }
