@@ -7,5 +7,5 @@ The tags are stored in a static class in Assets/Scripts/Tags.cs.
 
 
 # Known Bugs
-In the Editor after testing, most likely due to a problem with the Input System, all devices are removed and the 
-following error pops up: "A Native Collection has not been disposed, resulting in a memory leak. Allocated from:...".
+In the Editor sometimes after testing, most likely due to a problem with the Input System, all devices are removed and the following error pops up: "A Native Collection has not been disposed, resulting in a memory leak. Allocated from:...".
+This can be fixed by restarting the Unity Editor
