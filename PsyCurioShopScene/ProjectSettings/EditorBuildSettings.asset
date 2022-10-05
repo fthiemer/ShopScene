@@ -7,9 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/ShopScene.unity
-    guid: d735adea3f5162347b4c3e9fcec1b268
+    guid: a5056baaff0a2f149975e620730ae2af
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 9558e121186626a458a726c6274230b3,
       type: 2}
-    com.unity.input.settings: {fileID: 11400000, guid: eb988ce0005879f4d88fab6ae1944bb6,
+    com.unity.input.settings: {fileID: 11400000, guid: 2cfea2f05ce16844cb22fb9f32c379b2,
       type: 2}
