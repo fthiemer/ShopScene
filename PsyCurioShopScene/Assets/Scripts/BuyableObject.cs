@@ -40,7 +40,7 @@ public class BuyableObject : MonoBehaviour, IPointerClickHandler {
         Debug.Log($"Bought {ItemName} for {Price}");
     }
 
-    public void Buy() {
+    public void MarkAsBought() {
         isAlreadyBought = true;
     }
 }

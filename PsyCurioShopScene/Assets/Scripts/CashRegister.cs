@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,33 +11,34 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class CashRegister : MonoBehaviour, IPointerClickHandler {
     [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
-    private ICounter counter;
-    private Shopkeeper shopkeeper;
+    public ICounter counter;
+    public IShopkeeper shopkeeper;
 
     private void Awake() {
         gameObject.tag = Tags.CashRegister;
     }
 
     private void Start() {
-        counter = GameObject.FindWithTag(Tags.Counter)?.GetComponent<Counter>();
-        shopkeeper = GameObject.FindWithTag(Tags.Shopkeeper)?.GetComponent<Shopkeeper>();
+        counter = GameObject.FindWithTag(Tags.Counter).GetComponent<Counter>();
+        shopkeeper = GameObject.FindWithTag(Tags.Shopkeeper).GetComponent<Shopkeeper>();
     }
 
     public void OnPointerClick (PointerEventData eventData) {
-        shopkeeper.Say(MakeBillMessage());
+        shopkeeper.Say(ConstructBillMessage());
     }
 
     /// <summary>
     /// Constructs bill message from boughtItems.
     /// </summary>
     /// <returns> The bill string for the shopkeeper to say. </returns>
-    private string MakeBillMessage() {
+    private string ConstructBillMessage() {
         int boughtItemsCount = counter.BoughtItems.Count;
         //Return standard message if no items were bought
         if ( boughtItemsCount == 0) return zeroItemsBoughtMsg;
+        Debug.Assert(boughtItemsCount <= counter.MaxBuyableItems);
         float totalPrice = 0f;
         //Count occurences of items in dict and calculate price
-        //Store name -> (pieces bought, price of one instance) in dict
+        //Store mapping of itemName to (pieces bought, price of one instance) in dict
         var itemCountDict = new Dictionary<string, (int, float)>(counter.MaxBuyableItems); 
         foreach (BuyableObject buyableObject in counter.BoughtItems) {
             var tmpName = buyableObject.ItemName;
@@ -49,7 +52,7 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
             totalPrice += buyableObject.Price;
         }
         
-        //Build bill Message
+        //Build bill Message - item order is not guaranteed
         StringBuilder billText = new StringBuilder("You selected:\n");
         string itemSuffix;
         foreach (string key in itemCountDict.Keys) {
@@ -60,7 +63,8 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
                             $" for {curItemCount * curItemPrice}!!\n");
         }
         string summaryWord = counter.BoughtItems.Count == 1 ? "it" : "everything";
-        billText.Append($"\n For only {totalPrice} Robobucks you can take {summaryWord} with you.");
+        billText.Append($"\nFor only {totalPrice.ToString("#.##",CultureInfo.InvariantCulture)}" +
+                        $" Robodollars you can take {summaryWord} with you.");
         return billText.ToString();
     }
     

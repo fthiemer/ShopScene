@@ -2,21 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
 /// Responsible for Shopkeeper Animations, speechbubble text & activation.
 /// </summary>
-public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
+public class Shopkeeper : MonoBehaviour, IPointerClickHandler, IShopkeeper {
     public float ToWaveTransitionDuration => toWaveTransitionDuration;
     public float ToIdleTransitionDuration => toIdleTransitionDuration;
     
-    [SerializeField] private GameObject speechbubble;
-    [SerializeField] private TMPro.TMP_Text speechbubbleText;
     [SerializeField] private float toWaveTransitionDuration = 0.3f;
     [SerializeField] private float toIdleTransitionDuration = 0.8f;
 
+    private TMP_Text speechbubbleText;
 
     // Animation control
     private Animator animator;
@@ -30,6 +30,11 @@ public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
         baseLayerIndex = animator.GetLayerIndex("Base Layer");
     }
 
+    private void Start() {
+        var speechbubble = GameObject.FindWithTag(Tags.SpeechbubbleTMP);
+        speechbubbleText = speechbubble.GetComponent<TMP_Text>();
+    }
+
     public void OnPointerClick (PointerEventData eventData) {
         Wave();
     }
@@ -39,7 +44,6 @@ public class Shopkeeper : MonoBehaviour, IPointerClickHandler {
     /// </summary>
     /// <param name="text"></param>
     public void Say(string text) {
-        speechbubble.SetActive(true);
         speechbubbleText.text = text;
     }
 

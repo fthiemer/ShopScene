@@ -24,7 +24,7 @@ namespace Tests.EditMode {
             for (var i = 0; i < buyableObjectComponents.Length; i++) {
                 var buyableObjectComponent = buyableObjectComponents[i];
                 //Call Awake, as it would not be called in edit mode
-                reflection_helper.InvokePrivateMethod(buyableObjectComponent, "Awake");
+                ReflectionHelper.InvokePrivateVoidMethod(buyableObjectComponent, "Awake");
                 var counterSubstitute = Substitute.For<ICounter>();
                 buyableObjectComponent.Counter = counterSubstitute;
                 // Give PlaceOnCounter() return behaviour, as if it always places the item
@@ -69,12 +69,12 @@ namespace Tests.EditMode {
             //ARRANGE - happens in OneTimeSetup()
             for (int i = 0; i < buyableItems.Length; i++) {
                 var curComponent = buyableObjectComponents[i];
-                //ACT - call Buy
-                curComponent.Buy();
+                //ACT - call MarkAsBought
+                curComponent.MarkAsBought();
                 //ASSERT
                 Assert.IsTrue(curComponent.IsAlreadyBought);
                 //CLEANUP
-                reflection_helper.SetPrivateBoolField(curComponent, "isAlreadyBought", false);
+                ReflectionHelper.SetPrivateFieldOfType(curComponent, "isAlreadyBought", false);
                 Assert.IsFalse(curComponent.IsAlreadyBought);
             }
         }
@@ -84,8 +84,8 @@ namespace Tests.EditMode {
             //ARRANGE - happens in OneTimeSetup()
             for (int i = 0; i < buyableItems.Length; i++) {
                 var curComponent = buyableObjectComponents[i];
-                //ACT 1 - call Buy
-                curComponent.Buy();
+                //ACT 1 - call MarkAsBought
+                curComponent.MarkAsBought();
 
                 //ACT 2 - call private OnPointerClick of curComponent
                 curComponent.OnPointerClick(null);
@@ -95,7 +95,7 @@ namespace Tests.EditMode {
                 curComponent.Counter.Received(0).PlaceOnCounter(buyableItems[i]);
                 //CLEANUP
                 curComponent.Counter.ClearReceivedCalls();
-                reflection_helper.SetPrivateBoolField(curComponent, "isAlreadyBought", false);
+                ReflectionHelper.SetPrivateFieldOfType(curComponent, "isAlreadyBought", false);
                 Assert.IsFalse(curComponent.IsAlreadyBought);
             }
         }

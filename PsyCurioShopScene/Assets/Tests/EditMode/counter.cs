@@ -23,7 +23,7 @@ namespace Tests.EditMode {
             EditorSceneManager.OpenScene("Assets/Scenes/ShopScene.unity", OpenSceneMode.Single);
             counterObject = GameObject.FindWithTag(Tags.Counter);
             counterComponent = counterObject.GetComponent<Counter>();
-            reflection_helper.InvokePrivateMethod(counterComponent, "Awake");
+            ReflectionHelper.InvokePrivateVoidMethod(counterComponent, "Awake");
             buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
             foreach (var buyableItem in buyableItems) {
                 
@@ -186,7 +186,7 @@ namespace Tests.EditMode {
             Object.DestroyImmediate(counterComponent);
             counterObject.AddComponent<Counter>();
             counterComponent = counterObject.GetComponent<Counter>();
-            reflection_helper.InvokePrivateMethod(counterComponent, "Awake");
+            ReflectionHelper.InvokePrivateVoidMethod(counterComponent, "Awake");
         }
     }
 }

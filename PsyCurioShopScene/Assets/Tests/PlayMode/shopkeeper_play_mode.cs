@@ -41,7 +41,7 @@ namespace Tests.PlayMode {
         }
 
         [TearDown]
-        public void TearDown() {
+        public override void TearDown() {
             base.TearDown();
             sceneIsLoaded = false;
             referencesAreSetUp = false;

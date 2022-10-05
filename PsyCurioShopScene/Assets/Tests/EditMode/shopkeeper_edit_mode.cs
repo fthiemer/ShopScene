@@ -23,7 +23,8 @@ namespace Tests.EditMode {
             EditorSceneManager.OpenScene("Assets/Scenes/ShopScene.unity", OpenSceneMode.Single);
             shopkeeperObject = GameObject.FindWithTag(Tags.Shopkeeper);
             shopkeeperComponent = shopkeeperObject.GetComponent<Shopkeeper>();
-            reflection_helper.InvokePrivateMethod(shopkeeperComponent, "Awake");
+            ReflectionHelper.InvokePrivateVoidMethod(shopkeeperComponent, "Awake");
+            ReflectionHelper.InvokePrivateVoidMethod(shopkeeperComponent, "Start");
             shopkeeperAnimator = shopkeeperObject.GetComponent<Animator>();
             usedLayerIndex = shopkeeperAnimator.GetLayerIndex("Base Layer");
             var speechbubbleTMPObject = GameObject.FindWithTag(Tags.SpeechbubbleTMP);
@@ -35,13 +36,13 @@ namespace Tests.EditMode {
         public void Wave_sets_Shopkeeper_isWaving_to_true() {
             //ARRANGE - happened in SetUp
             //ACT
-            reflection_helper.InvokePrivateMethod(shopkeeperComponent, "Wave");
+            ReflectionHelper.InvokePrivateVoidMethod(shopkeeperComponent, "Wave");
 
             //ASSERT
             Assert.IsTrue(shopkeeperComponent.IsWaving);
             
             //CLEANUP - see CustomTearDown
-            reflection_helper.SetPrivateBoolField(shopkeeperComponent, "isWaving", false);}
+            ReflectionHelper.SetPrivateFieldOfType(shopkeeperComponent, "isWaving", false);}
 
         [Test]
         public void Say_sets_speechbubble_text() {
