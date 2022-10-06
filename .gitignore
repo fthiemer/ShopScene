@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/unity,rider
 # Edit at https://www.toptal.com/developers/gitignore?templates=unity,rider
-# Unity and Rider part edited by fthiemer so the .gitignore can sit in the root of the project instead of the unity project root
+# Unity and Rider part edited by fthiemer so the .gitignore can sit in the root of the git repo instead of the unity project root
+# Exception added for /*/Library/EditorBuildSettings, so that build settings are pushed
 
 ### NSubstitute ###
 # by fthiemer, ignore NSubstitute Analyzer Package
@@ -90,7 +91,9 @@ cmake-build-*/
 # Modified to sit exactly one directory above Unity Project
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
+!/*/[Ll]ibrary/
 /*/[Ll]ibrary/
+!/*/[Ll]ibrary/EditorBuildSettings.asset
 /*/[Tt]emp/
 /*/[Oo]bj/
 /*/[Bb]uild/
