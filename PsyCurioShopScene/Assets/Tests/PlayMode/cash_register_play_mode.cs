@@ -59,9 +59,12 @@ namespace Tests.PlayMode {
             referencesAreSetUp = true;
         }
 
-        
+        /// <summary>
+        /// Click on CashRegister triggers Shopkeeper.Say once with message formulated by ConstructBillMessage
+        /// </summary>
+        /// <returns></returns>
         [UnityTest]
-        public IEnumerator Click_on_CashRegister_triggers_Shopkeeper_Say_with_constructed_bill_message() {
+        public IEnumerator click_on_CashRegister_calls_Shopkeeper_Say_with_text_for_speechbubble() {
             //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
@@ -77,7 +80,7 @@ namespace Tests.PlayMode {
             Release(mouse.leftButton);
             yield return null;
 
-            //ASSERT 1 - Shopkeeper Substitutes Say is triggered once with message formulated by makebill message
+            //ASSERT
             cashRegisterComponent.shopkeeper.Received(1).Say(billMessage);
             
             //CLEANUP

@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 
 namespace Tests.EditMode {
-    public class cash_register_edit_mode : MonoBehaviour
+    public class cash_register : MonoBehaviour
     {
         private GameObject cashRegisterObject;
         private CashRegister cashRegisterComponent;
@@ -41,7 +41,7 @@ namespace Tests.EditMode {
         }
 
         [Test]
-        public void ConstructBillMessage_when_Counter_BoughtItems_empty_returns_zeroItemsBoughtMsg() {
+        public void ConstructBillMessage_if_Counter_BoughtItems_empty_returns_zeroItemsBoughtMsg() {
             //ARRANGE
             //ACT
             string constructedMessage =
@@ -60,7 +60,7 @@ namespace Tests.EditMode {
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
-        public void ConstructBillMessage_calculates_correct_total_price(int testCaseIndex) {
+        public void ConstructBillMessage_for_different_boughtItems_calculates_correct_total_price(int testCaseIndex) {
             //ARRANGE - Fill boughtItems List depending on TestCase
             List<int> itemsToBuyIndexList = itemIndexForTestCases[testCaseIndex];
             var tmpBoughtItems = new List<BuyableObject>(itemsToBuyIndexList.Count);
@@ -79,8 +79,7 @@ namespace Tests.EditMode {
             
             // Convert to string with decimal point instead of comma and two decimals after the dot
             string totalPriceString = totalPrice.ToString("#.##", CultureInfo.InvariantCulture);
-            Debug.Log(totalPriceString);
-            
+
             //ACT - construct message
             string constructedMessage =
                 ReflectionHelper.InvokePrivateNonVoidMethod<string>(cashRegisterComponent, 

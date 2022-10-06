@@ -54,8 +54,7 @@ namespace Tests.PlayMode {
         
 
         /// <summary>
-        /// Make sure, all items are clickable in current scene.
-        /// Do so by simulating mouse click on their center.
+        /// Make sure, all items are clickable in current scene. Do so by simulating mouse click on their center.
         /// </summary>
         [UnityTest]
         public IEnumerator mouse_click_on_items_calls_ICounter_PlaceOnCounter() {

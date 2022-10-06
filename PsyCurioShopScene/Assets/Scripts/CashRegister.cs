@@ -53,14 +53,16 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
         }
         
         //Build bill Message - item order is not guaranteed
+        // CultureInfo.. is used, so that message uses floating points instead of comma
         StringBuilder billText = new StringBuilder("You selected:\n");
         string itemSuffix;
         foreach (string key in itemCountDict.Keys) {
             int curItemCount = itemCountDict[key].Item1;
             float curItemPrice = itemCountDict[key].Item2;
+            float combinedPrice = curItemCount * curItemPrice;
             itemSuffix = curItemCount == 1 ? "" : "s";
             billText.Append($"{curItemCount} {key}{itemSuffix}" +
-                            $" for {curItemCount * curItemPrice}!!\n");
+                            $" for {combinedPrice.ToString("#.##",CultureInfo.InvariantCulture)}!!\n");
         }
         string summaryWord = counter.BoughtItems.Count == 1 ? "it" : "everything";
         billText.Append($"\nFor only {totalPrice.ToString("#.##",CultureInfo.InvariantCulture)}" +

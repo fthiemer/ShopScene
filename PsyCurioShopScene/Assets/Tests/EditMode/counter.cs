@@ -25,13 +25,10 @@ namespace Tests.EditMode {
             counterComponent = counterObject.GetComponent<Counter>();
             ReflectionHelper.InvokePrivateVoidMethod(counterComponent, "Awake");
             buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
-            foreach (var buyableItem in buyableItems) {
-                
-            }
         }
     
         [Test]
-        public void max_buyable_items_equals_number_of_child_objects_after_awake() {
+        public void maxBuyableItems_equals_number_of_child_objects_after_Awake() {
             //ARRANGE -> happens in OneTimeSetUp()
             //ACT -> Awake call in OneTimeSetUp()
             //ASSERT
@@ -39,11 +36,12 @@ namespace Tests.EditMode {
         }    
     
         [Test]
-        public void max_buyable_items_equals_5_after_awake() {
+        public void maxBuyableItems_equals_5_after_Awake() {
             //ARRANGE -> happens in OneTimeSetUp()
             //ACT -> Awake call in OneTimeSetUp()
             //ASSERT
             Assert.AreEqual(5, counterComponent.MaxBuyableItems);
+            //CLEANUP - not necessary
         }
     
         [TestCase("6 3 0")]
@@ -107,7 +105,7 @@ namespace Tests.EditMode {
         }
 
         [Test]
-        public void PlaceOnCounter_calls_Buy_after_cloning_so_isAlreadyBought_is_true() {
+        public void PlaceOnCounter_sets_isAlreadyBought_to_true() {
             //ARRANGE
             var item = buyableItems[^1];
         
@@ -147,7 +145,7 @@ namespace Tests.EditMode {
         }    
     
         [Test]
-        public void PlaceOnCounter_items_in_boughtItems_are_upper_bound_by_maxBuyableItems() {
+        public void PlaceOnCounter_when_boughtItems_has_maxBuyableItems_doesnt_place_more_items() {
             //ARRANGE - choose item to place and prepare clone removal
             var item = buyableItems[0];
             int maxBuyableItems = counterComponent.MaxBuyableItems;

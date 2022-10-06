@@ -53,7 +53,7 @@ namespace Tests.PlayMode {
         /// </summary>
         private void SetUpSharedReferences() {
             if (referencesAreSetUp) return;
-            //get camera object
+            // Get camera object
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
             shopkeeperObject = GameObject.FindWithTag(Tags.Shopkeeper);
             shopkeeperComponent = shopkeeperObject.GetComponent<Shopkeeper>();
@@ -70,11 +70,14 @@ namespace Tests.PlayMode {
 
 
         [UnityTest]
-        public IEnumerator Shopkeeper_starts_with_idle_animation() {
-            //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
+        public IEnumerator Shopkeeper_Animator_starts_with_idle_animation() {
+            //ARRANGE - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
+            //ACT
+            //ASSERT
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
+            //CLEANUP - in TearDown
         }
         
         
@@ -88,11 +91,7 @@ namespace Tests.PlayMode {
             
             //ACT - Click on Shopkeeper
             Vector2 screenPos = camera.WorldToScreenPoint(shopkeeperClickPos);
-            Set(mouse.position, screenPos, queueEventOnly: false);
-            Press(mouse.leftButton);
-            yield return null;
-            Release(mouse.leftButton);
-            yield return null;
+            yield return ClickAt(screenPos);
 
             //ASSERT 1 - Waving Animation is played after transition time
             yield return new WaitForSeconds(shopkeeperComponent.ToWaveTransitionDuration + 0.05f);
@@ -103,6 +102,8 @@ namespace Tests.PlayMode {
             yield return new WaitUntil(animationFinished);
             yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration + 0.05f);
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
+            
+            //CLEANUP - in TearDown
         }
         
         [UnityTest]
@@ -124,20 +125,28 @@ namespace Tests.PlayMode {
             // as long as animator does not transition to next animation and current animation is not finished
             while (!shopkeeperAnimator.IsInTransition(usedLayerIndex) && 
                    shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).normalizedTime % 1f < 0.95f) {
-                // click - This part of code cant be extracted as method without breaking the test for some reason :/
-                Set(mouse.position, screenPos, queueEventOnly: false);
-                Press(mouse.leftButton);
-                yield return null;
-                Release(mouse.leftButton);
-                yield return null;
+                yield return ClickAt(screenPos);
             }
             
             // ASSERT - Make sure transition is to idle not waving again
             yield return new WaitUntil(animationFinished);
             yield return new WaitForSeconds(shopkeeperComponent.ToIdleTransitionDuration + 0.05f);
             Assert.IsTrue(shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).IsName("Idle"));
+            
+            //CLEANUP - in TearDown
         }
-        
 
+        /// <summary>
+        /// Simulate click at target screen position
+        /// </summary>
+        /// <param name="screenPos"></param>
+        /// <returns></returns>
+        private IEnumerator ClickAt(Vector2 screenPos) {
+            Set(mouse.position, screenPos, queueEventOnly: false);
+            Press(mouse.leftButton);
+            yield return null;
+            Release(mouse.leftButton);
+            yield return null;
+        }
     }
 }

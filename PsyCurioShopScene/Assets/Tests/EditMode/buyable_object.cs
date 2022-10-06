@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -37,7 +36,6 @@ namespace Tests.EditMode {
         [Test]
         public void OnPointerClick_triggers_ICounter_PlaceOnCounter() {
             //ARRANGE - see OneTimeSetup()
-            
             for (int i=0; i<buyableItems.Length; i++) {
                 //ACT - Call OnPointerClick
                 var curComponent = buyableObjectComponents[i];
@@ -64,6 +62,7 @@ namespace Tests.EditMode {
             }
         }
 
+        
         [Test]
         public void Buy_sets_isAlreadyBought_to_true() {
             //ARRANGE - happens in OneTimeSetup()
