@@ -91,8 +91,7 @@ cmake-build-*/
 # Modified to sit exactly one directory above Unity Project
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
-!/*/[Ll]ibrary/
-/*/[Ll]ibrary/
+/*/[Ll]ibrary/*
 !/*/[Ll]ibrary/EditorBuildSettings.asset
 /*/[Tt]emp/
 /*/[Oo]bj/
