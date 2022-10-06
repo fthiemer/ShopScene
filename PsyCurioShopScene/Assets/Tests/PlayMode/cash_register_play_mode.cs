@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode;
@@ -64,7 +63,7 @@ namespace Tests.PlayMode {
         /// </summary>
         /// <returns></returns>
         [UnityTest]
-        public IEnumerator click_on_CashRegister_calls_Shopkeeper_Say_with_text_for_speechbubble() {
+        public IEnumerator ShopScene_click_on_CashRegister_calls_ShopkeeperSay_with_text_for_speechbubble() {
             //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();

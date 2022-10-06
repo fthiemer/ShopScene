@@ -1,13 +1,7 @@
-using System.Collections;
-using System.Linq;
-using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using TMPro;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TestTools;
 
 namespace Tests.EditMode {
     public class shopkeeper {
@@ -15,8 +9,7 @@ namespace Tests.EditMode {
         private Shopkeeper shopkeeperComponent;
         private Animator shopkeeperAnimator;
         private TMP_Text speechbubbleTMP;
-        private int usedLayerIndex;
-    
+
         [OneTimeSetUp]
         public void OneTimeSetUp() {
             //Load Scene
@@ -26,8 +19,6 @@ namespace Tests.EditMode {
             shopkeeperComponent = shopkeeperObject.GetComponent<Shopkeeper>();
             ReflectionHelper.InvokePrivateVoidMethod(shopkeeperComponent, "Awake");
             ReflectionHelper.InvokePrivateVoidMethod(shopkeeperComponent, "Start");
-            shopkeeperAnimator = shopkeeperObject.GetComponent<Animator>();
-            usedLayerIndex = shopkeeperAnimator.GetLayerIndex("Base Layer");
             var speechbubbleTMPObject = GameObject.FindWithTag(Tags.SpeechbubbleTMP);
             speechbubbleTMP = speechbubbleTMPObject.GetComponent<TMP_Text>();
         }
@@ -42,7 +33,7 @@ namespace Tests.EditMode {
             //ASSERT
             Assert.IsTrue(shopkeeperComponent.IsWaving);
             
-            //CLEANUP - see CustomTearDown
+            //CLEANUP
             ReflectionHelper.SetPrivateFieldOfType(shopkeeperComponent, "isWaving", false);}
 
         [Test]
@@ -56,6 +47,7 @@ namespace Tests.EditMode {
             
             //ASSERT
             Assert.AreEqual(speechbubbleText, speechbubbleTMP.text);
+            //CLEANUP - not necessary
         }
     }
 }

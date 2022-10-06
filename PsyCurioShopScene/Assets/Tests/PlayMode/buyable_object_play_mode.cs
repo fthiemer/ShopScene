@@ -12,6 +12,7 @@ namespace Tests.PlayMode {
         private GameObject[] buyableItems;
         private BuyableObject[] buyableObjectComponents;
         private Camera camera;
+        private Mouse mouse;
         private bool sceneIsLoaded;
         private bool referencesAreSetUp;
 
@@ -34,13 +35,13 @@ namespace Tests.PlayMode {
         /// <summary>
         /// Non-Input System related setup. Depends on the scene already being loaded
         /// </summary>
-        private void SetUpCommonReferences() {
+        private void SetUpSharedReferences() {
             if (referencesAreSetUp) return;
             buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
             buyableObjectComponents = buyableItems.Select(x => x.GetComponent<BuyableObject>()).ToArray();
-            //get camera object
+            // Get camera object
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
-            //ARRANGE - Setup Substitute for the counter
+            // SetUp Substitute for the counter
             for (var i = 0; i < buyableObjectComponents.Length; i++) {
                 var buyableObjectComponent = buyableObjectComponents[i];
                 var counterSubstitute = Substitute.For<ICounter>();
@@ -57,13 +58,13 @@ namespace Tests.PlayMode {
         /// Make sure, all items are clickable in current scene. Do so by simulating mouse click on their center.
         /// </summary>
         [UnityTest]
-        public IEnumerator mouse_click_on_items_calls_ICounter_PlaceOnCounter() {
+        public IEnumerator ShopScene_mouse_click_on_items_calls_ICounterPlaceOnCounter() {
             //ARRANGE 2 - wait for scene to load in OneTimeSetup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
-            SetUpCommonReferences();
+            SetUpSharedReferences();
             
             //ARRANGE 3 - Prepare usable mouse -> easy with Input System \o/
-            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            mouse = InputSystem.AddDevice<Mouse>();
 
             //ACT - click on screen pos, that correlates to items world pos
             for (int i = 0; i < buyableItems.Length; i++) {
@@ -76,7 +77,7 @@ namespace Tests.PlayMode {
                 yield return null;
 
                 //ASSERT
-                //Use Received method of Substitute to confirm exactly one call to PlaceOnCounter
+                // Use Received method of Substitute to confirm exactly one call to PlaceOnCounter
                 buyableObjectComponents[i].Counter.Received(1).PlaceOnCounter(buyableItems[i]);
 
                 //CLEANUP

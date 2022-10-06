@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
-using System.Linq;
-using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -24,7 +21,7 @@ namespace Tests.PlayMode {
 
         /// <summary>
         /// Set sceneLoaded to true, so tests can use WaitUntil and SetUp can be used to load scene
-        /// even though its not an IEnumerator.
+        /// even though its not an IEnumerator. 
         /// </summary>
         /// <param name="scene"></param>
         /// <param name="loadingMode"></param>
@@ -43,6 +40,7 @@ namespace Tests.PlayMode {
         [TearDown]
         public override void TearDown() {
             base.TearDown();
+            // Make sure Scene is loaded and setup again for each test
             sceneIsLoaded = false;
             referencesAreSetUp = false;
         }
@@ -64,7 +62,7 @@ namespace Tests.PlayMode {
             shopkeeperAnimator = shopkeeperObject.GetComponent<Animator>();
             usedLayerIndex = shopkeeperAnimator.GetLayerIndex("Base Layer");
             animationFinished =
-                new Func<bool>(() => shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).normalizedTime > 1);
+                () => shopkeeperAnimator.GetCurrentAnimatorStateInfo(usedLayerIndex).normalizedTime > 1;
             referencesAreSetUp = true;
         }
 
@@ -137,7 +135,7 @@ namespace Tests.PlayMode {
         }
 
         /// <summary>
-        /// Simulate click at target screen position
+        /// Helper function to simulate click at target screen position
         /// </summary>
         /// <param name="screenPos"></param>
         /// <returns></returns>

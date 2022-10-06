@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Castle.Components.DictionaryAdapter;
-using NSubstitute;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Text.RegularExpressions;
 
 namespace Tests.EditMode {
-    public class cash_register : MonoBehaviour
-    {
+    public class cash_register {
         private GameObject cashRegisterObject;
         private CashRegister cashRegisterComponent;
         private GameObject[] buyableObjects;
@@ -30,7 +27,7 @@ namespace Tests.EditMode {
 
 
         [SetUp]
-        public void Setup() {
+        public void SetUp() {
             EditorSceneManager.OpenScene("Assets/Scenes/ShopScene.unity", OpenSceneMode.Single);
             cashRegisterObject = GameObject.FindWithTag(Tags.CashRegister);
             cashRegisterComponent = cashRegisterObject.GetComponent<CashRegister>();
@@ -51,7 +48,7 @@ namespace Tests.EditMode {
             string zeroItemsBoughtMsg = ReflectionHelper.GetPrivateFieldOfType<string>(cashRegisterComponent,
                 "zeroItemsBoughtMsg") as string;
             Assert.AreEqual(zeroItemsBoughtMsg, constructedMessage);
-            //CLEANUP
+            //CLEANUP - not needed as method doesnt change anything & SetUp reinstantiates everything
         }
         
         [TestCase(0)]
@@ -60,7 +57,7 @@ namespace Tests.EditMode {
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
-        public void ConstructBillMessage_for_different_boughtItems_calculates_correct_total_price(int testCaseIndex) {
+        public void ConstructBillMessage_holds_correct_total_price_in_last_message_line(int testCaseIndex) {
             //ARRANGE - Fill boughtItems List depending on TestCase
             List<int> itemsToBuyIndexList = itemIndexForTestCases[testCaseIndex];
             var tmpBoughtItems = new List<BuyableObject>(itemsToBuyIndexList.Count);

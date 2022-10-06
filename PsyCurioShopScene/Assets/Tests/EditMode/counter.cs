@@ -33,6 +33,7 @@ namespace Tests.EditMode {
             //ACT -> Awake call in OneTimeSetUp()
             //ASSERT
             Assert.AreEqual(counterObject.transform.childCount, counterComponent.MaxBuyableItems);
+            //CLEANUP - nothing changed
         }    
     
         [Test]
@@ -97,9 +98,10 @@ namespace Tests.EditMode {
                 Assert.AreEqual(expectedPosition, placedItem.transform.position);
             
                 //CLEANUP
-                //Destroy placed Item before next gets placed so no interference or lack of slots can happen
+                //  Destroy placed Item before next gets placed so no interference or lack of slots can happen
                 Object.DestroyImmediate(placedItem);
-                //Make sure Objects will be placed at same position again (in case counter positions change)
+                //  Make sure Objects will be placed at same position again (in case counter positions change)
+                //  and reset bought Items list
                 ResetCounterComponent();
             }
         }
