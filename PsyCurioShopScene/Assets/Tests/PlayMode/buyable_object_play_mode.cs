@@ -16,10 +16,19 @@ namespace Tests.PlayMode {
         private bool sceneIsLoaded;
         private bool referencesAreSetUp;
 
-        [OneTimeSetUp]
-        public void OneTimeSetup() {
+        [SetUp]
+        public void SetUp() {
             SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene("Assets/Scenes/ShopScene.unity");
+            SceneManager.LoadScene("Assets/Scenes/ShopScene.unity", LoadSceneMode.Single);
+            base.Setup();
+            mouse = InputSystem.AddDevice<Mouse>();
+        }
+
+        [TearDown]
+        public override void TearDown() {
+            base.TearDown();
+            sceneIsLoaded = false;
+            referencesAreSetUp = false;
         }
 
         /// <summary>
