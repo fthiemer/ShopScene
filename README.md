@@ -12,3 +12,4 @@ The tags are stored in a static class in Assets/Scripts/Tags.cs.
 2. ~~Text looks bad on lower resolutions (fizzles out on the edges).~~ -> Fixed (Anti-Aliasing was the problem, created overlay camera without pre-processing to fix it)
     - ~~It looks ok/good on 1920x1080.~~ 
 	- ~~Was not fixable by regenerating the used font set and fixing the sampling point to padding ratio at near 10% or more, as recommended on unity answers.~~
+
