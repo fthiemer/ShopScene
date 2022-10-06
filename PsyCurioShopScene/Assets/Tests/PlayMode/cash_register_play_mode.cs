@@ -29,7 +29,7 @@ namespace Tests.PlayMode {
         }
 
         [SetUp]
-        public void SetUp() {
+        public override void Setup() {
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene("Assets/Scenes/ShopScene.unity", LoadSceneMode.Single);
             base.Setup();
