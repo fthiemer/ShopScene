@@ -11,17 +11,18 @@ public class BuyableObject : MonoBehaviour, IPointerClickHandler {
     /// <summary>
     /// The distance between center and lower edge. Used for correct placement on the counter.
     /// </summary>
+    public ICounter Counter { get; set; }
     public float YOffset { get; private set; }
-
-    [SerializeField] private string itemName;
     public string ItemName => itemName;
+    public float Price => price;
+    public bool IsBought => isBought;
+    public int UniqueID => uniqueID;
 
     [SerializeField] private float price;
-    public float Price => price;
-    public bool IsAlreadyBought => isAlreadyBought;
-    public ICounter Counter { get; set; }
+    [SerializeField] private string itemName;
 
-    private bool isAlreadyBought;
+    private bool isBought;
+    private int uniqueID;
 
     private void Awake() {
         gameObject.tag = Tags.Item;
@@ -35,12 +36,12 @@ public class BuyableObject : MonoBehaviour, IPointerClickHandler {
 
     public void OnPointerClick (PointerEventData eventData) {
         //Only react to click, if item was bought
-        if (isAlreadyBought) return; 
+        if (isBought) return; 
         Counter.PlaceOnCounter(gameObject);
         Debug.Log($"Bought {ItemName} for {Price}");
     }
 
     public void MarkAsBought() {
-        isAlreadyBought = true;
+        isBought = true;
     }
 }

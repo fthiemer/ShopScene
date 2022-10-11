@@ -25,9 +25,9 @@ public class Counter : MonoBehaviour, ICounter {
 
     /// <summary>
     /// Place boughtItem on counter considering yOffset, if current number of placed items is below maxBuyableItems
-    /// and add their BuyableObject components to boughtItem list.
+    /// , add their BuyableObject components to boughtItem list.
     /// </summary>
-    /// <param name="boughtItem"></param>
+    /// <param name="boughtItem"> Game object that should be copied to the counter</param>
     public GameObject PlaceOnCounter(GameObject boughtItem) {
         if (boughtItems.Count >= MaxBuyableItems) return null;
         // Get BuyableObject component for later cash register use
@@ -41,5 +41,13 @@ public class Counter : MonoBehaviour, ICounter {
         //Mark clone as already bought, so clicking it, wont work anymore
         tmpPlacedObject.GetComponent<BuyableObject>().MarkAsBought();
         return tmpPlacedObject;
+    }
+
+    public void RemoveItemFromCounter(int itemID) {
+        
+    }
+
+    private void AssignUniqueItemID(BuyableObject item) {
+        
     }
 }

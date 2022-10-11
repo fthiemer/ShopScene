@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
@@ -50,15 +51,6 @@ namespace Tests.PlayMode {
             buyableObjectComponents = buyableItems.Select(x => x.GetComponent<BuyableObject>()).ToArray();
             // Get camera object
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
-            // SetUp Substitute for the counter
-            for (var i = 0; i < buyableObjectComponents.Length; i++) {
-                var buyableObjectComponent = buyableObjectComponents[i];
-                var counterSubstitute = Substitute.For<ICounter>();
-                buyableObjectComponent.Counter = counterSubstitute;
-                // Give PlaceOnCounter() return behaviour, as if it always places the item
-                buyableObjectComponent.Counter.PlaceOnCounter(buyableItems[i])
-                    .Returns(buyableItems[i]);
-            }
             referencesAreSetUp = true;
         }
         
@@ -68,10 +60,18 @@ namespace Tests.PlayMode {
         /// </summary>
         [UnityTest]
         public IEnumerator ShopScene_mouse_click_on_items_calls_ICounterPlaceOnCounter() {
-            //ARRANGE 2 - wait for scene to load in OneTimeSetup, then set up references if not done yet
+            //ARRANGE 2 - wait for scene to load in Setup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
-            
+            // SetUp Substitute for the counter
+            for (var i = 0; i < buyableObjectComponents.Length; i++) {
+                var buyableObjectComponent = buyableObjectComponents[i];
+                var counterSubstitute = Substitute.For<ICounter>();
+                buyableObjectComponent.Counter = counterSubstitute;
+                buyableObjectComponent.Counter.PlaceOnCounter(buyableItems[i])
+                    .Returns(buyableItems[i]);
+            }
+
             //ARRANGE 3 - Prepare usable mouse -> easy with Input System \o/
             mouse = InputSystem.AddDevice<Mouse>();
 
@@ -91,6 +91,52 @@ namespace Tests.PlayMode {
 
                 //CLEANUP
                 buyableObjectComponents[i].Counter.ClearReceivedCalls();
+            }
+        }
+
+        
+        /// <summary>
+        /// Make sure, all bought items are clickable in current scene and trigger
+        /// Counter.RemoveItemFromCounter on click.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator ShopScene_click_on_bought_items_calls_RemoveItemFromCounter_with_items_ID() {
+            //ARRANGE 2 - wait for scene to load in Setup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+            //ARRANGE 3 - Prepare usable mouse -> easy with Input System \o/
+            mouse = InputSystem.AddDevice<Mouse>();
+            //ARRANGE 4 - Buy all items once
+            var boughtItems = new List<GameObject>();
+            var boughtItemComponents = new List<BuyableObject>();
+            foreach (var item in buyableItems) {
+                var counter = item.GetComponent<Counter>();
+                var placedItem = counter.PlaceOnCounter(item);
+                //Add only successfully placed items (for the case, there are
+                // more items to buy than slots on the counter)
+                if (placedItem != null) {
+                    boughtItems.Add(placedItem);
+                }
+            }
+            foreach (var item in boughtItems) {
+                //ARRANGE 5 - Place Substitute
+                var buyableObjectComponent = item.GetComponent<BuyableObject>();
+                buyableObjectComponent.Counter = Substitute.For<ICounter>();
+                
+                //ACT - click on screen pos, that correlates to items world pos
+                var worldPos = item.transform.position;
+                Vector2 screenPos = camera.WorldToScreenPoint(worldPos);
+                Set(mouse.position, screenPos, queueEventOnly: false);
+                Press(mouse.leftButton);
+                yield return null;
+                Release(mouse.leftButton);
+                yield return null;
+
+                //ASSERT
+                // Confirm exactly one call to RemoveItemFromCounter with correct ID
+                buyableObjectComponent.Counter.Received(1).RemoveItemFromCounter(buyableObjectComponent.UniqueID);
+
+                //CLEANUP - done in TearDown and next Setup which reloads scene from scratch
             }
         }
     }

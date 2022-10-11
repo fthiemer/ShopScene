@@ -81,9 +81,7 @@ namespace Tests.EditMode {
             RemovePlacedItems(itemsToRemoveInCleanUp);
             ResetCounterComponent();
         }
-
-
-
+        
         [Test]
         public void PlaceOnCounter_places_every_item_with_correct_y_offset_in_first_counter_slot() {
             //ARRANGE - Happens in OneTimeSetUp()
@@ -107,7 +105,7 @@ namespace Tests.EditMode {
         }
 
         [Test]
-        public void PlaceOnCounter_sets_isAlreadyBought_to_true() {
+        public void PlaceOnCounter_sets_isBought_to_true() {
             //ARRANGE
             var item = buyableItems[^1];
         
@@ -116,7 +114,7 @@ namespace Tests.EditMode {
             
             //ASSERT
             var curBuyableObject = placedItem.GetComponent<BuyableObject>();
-            Assert.IsTrue(curBuyableObject.IsAlreadyBought);
+            Assert.IsTrue(curBuyableObject.IsBought);
         
             //CLEANUP
             Object.DestroyImmediate(placedItem);
@@ -166,7 +164,52 @@ namespace Tests.EditMode {
             RemovePlacedItems(itemsToRemoveOnCleanUp);
             ResetCounterComponent();
         }
-
+        
+        /// <summary>
+        /// Place all items and remove a single one
+        /// </summary>
+        /// <param name="itemID"> The id of the item to remove. 0 to 4 as those are the first 5 assigned.</param>
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        public void RemoveFromCounter_with_full_counter_doesnt_change_other_items_on_counter(int itemID) {
+            //ARRANGE - place maxbuyable items, save positions, prices and names
+            //  (except of item to remove) and prepare cleanup
+            var maxBuyableItems = counterComponent.MaxBuyableItems;
+            var notRemovedItems = new List<GameObject>(maxBuyableItems);
+            var initialStates = 
+                new List<(string Name, float Price, Vector3 Pos)>(maxBuyableItems);
+            for (var i = 0; i < maxBuyableItems; i++) {
+                var placedItem = counterComponent.PlaceOnCounter(buyableItems[i]);
+                // dont add item that will be removed
+                if (i == itemID) continue;
+                // save to check for changes later
+                var curPrice = counterComponent.BoughtItems[i].Price;
+                var curName = counterComponent.BoughtItems[i].ItemName;
+                initialStates.Add((Name: curName, 
+                                        Price: curPrice, 
+                                        Pos: placedItem.transform.position));
+                // add to remove list
+                notRemovedItems.Add(placedItem);
+            }
+            //ACT - remove item with itemID, here 
+            counterComponent.RemoveItemFromCounter(itemID);
+            //ASSERT - positions, names, prices are the same
+            for (var i = 0; i < notRemovedItems.Count; i++) {
+                var item = notRemovedItems[i];
+                Assert.AreEqual( initialStates[i].Pos, item.transform.position);
+                var buyableObjectComponent = item.GetComponent<BuyableObject>();
+                Assert.AreEqual(initialStates[i].Name, buyableObjectComponent.ItemName);
+                Assert.AreEqual(initialStates[i].Price, buyableObjectComponent.Price);
+            }
+            //CLEANUP 
+            RemovePlacedItems(notRemovedItems);
+            ResetCounterComponent();
+        }
+        
+        
         /// <summary>
         /// Teardown Helper Method to remove the clone items spawned by PlaceOnCounter calls.
         /// </summary>

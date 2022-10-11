@@ -15,4 +15,6 @@ public interface ICounter {
     /// </summary>
     /// <param name="boughtItem"></param>
     GameObject PlaceOnCounter(GameObject boughtItem);
+
+    void RemoveItemFromCounter(int uniqueID);
 }
