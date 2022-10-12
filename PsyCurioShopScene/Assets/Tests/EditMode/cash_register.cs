@@ -60,13 +60,11 @@ namespace Tests.EditMode {
         public void ConstructBillMessage_holds_correct_total_price_in_last_message_line(int testCaseIndex) {
             //ARRANGE - Fill boughtItems List depending on TestCase
             List<int> itemsToBuyIndexList = itemIndexForTestCases[testCaseIndex];
-            var tmpBoughtItems = new List<BuyableObject>(itemsToBuyIndexList.Count);
-            int i = 0;
+            var tmpBoughtItems = new List<Buyable>(itemsToBuyIndexList.Count);
             foreach (int itemIndex in itemsToBuyIndexList) {
-                tmpBoughtItems.Add(buyableObjects[itemIndex].GetComponent<BuyableObject>());
+                tmpBoughtItems.Add(buyableObjects[itemIndex].GetComponent<Buyable>());
                 var placedObject = cashRegisterComponent.counter.PlaceOnCounter(buyableObjects[itemIndex]);
                 Assert.NotNull(placedObject);
-                i++;
             }
             // calculate correct total price
             float totalPrice = 0;

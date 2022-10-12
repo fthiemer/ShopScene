@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.TestTools;
 using Object = UnityEngine.Object;
 
 
@@ -18,8 +20,8 @@ namespace Tests.EditMode {
         /// Doing this once instead of only instantiating objects for each test as needed has the advantage of
         /// testing the scene for correct setup as well + being efficient
         /// </summary>
-        [OneTimeSetUp]
-        public void OneTimeSetUp() {
+        [SetUp]
+        public void SetUp() {
             EditorSceneManager.OpenScene("Assets/Scenes/ShopScene.unity", OpenSceneMode.Single);
             counterObject = GameObject.FindWithTag(Tags.Counter);
             counterComponent = counterObject.GetComponent<Counter>();
@@ -72,9 +74,9 @@ namespace Tests.EditMode {
             // ASSERT 2 - ensure only correct items (= first maxBuyableItems items)  were placed on counter
             var boughtItems = counterComponent.BoughtItems;
             for (int i = 0; i < boughtItems.Count; i++) {
-                var tmpBuyableObject = itemsPlacedOnCounterWasCalledOn[i].GetComponent<BuyableObject>();
-                Assert.AreEqual(tmpBuyableObject.ItemName, boughtItems[i].ItemName);
-                Assert.AreEqual(tmpBuyableObject.Price, boughtItems[i].Price);
+                var tmpBuyableObject = itemsPlacedOnCounterWasCalledOn[i].GetComponent<Buyable>();
+                Assert.AreEqual(tmpBuyableObject.ItemName, boughtItems[i].buyable.ItemName);
+                Assert.AreEqual(tmpBuyableObject.Price, boughtItems[i].buyable.Price);
             }
         
             //CLEANUP
@@ -82,26 +84,25 @@ namespace Tests.EditMode {
             ResetCounterComponent();
         }
         
-        [Test]
-        public void PlaceOnCounter_places_every_item_with_correct_y_offset_in_first_counter_slot() {
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        public void PlaceOnCounter_places_every_item_with_correct_y_offset_in_first_counter_slot(int itemIndex) {
             //ARRANGE - Happens in OneTimeSetUp()
-            foreach (var item in buyableItems) {
-                //ACT
-                GameObject placedItem = counterComponent.PlaceOnCounter(item);
-            
-                //ASSERT
-                var curBuyableObject = placedItem.GetComponent<BuyableObject>();
-                var placementPosition = counterObject.transform.GetChild(0).position;
-                var expectedPosition = Vector3.up * curBuyableObject.YOffset + placementPosition;
-                Assert.AreEqual(expectedPosition, placedItem.transform.position);
-            
-                //CLEANUP
-                //  Destroy placed Item before next gets placed so no interference or lack of slots can happen
-                Object.DestroyImmediate(placedItem);
-                //  Make sure Objects will be placed at same position again (in case counter positions change)
-                //  and reset bought Items list
-                ResetCounterComponent();
-            }
+            //ACT
+            GameObject placedItem = counterComponent.PlaceOnCounter(buyableItems[itemIndex]);
+        
+            //ASSERT
+            var curBuyableObject = placedItem.GetComponent<Buyable>();
+            var placementPosition = counterObject.transform.GetChild(0).transform.position;
+            var expectedPosition = Vector3.up * curBuyableObject.YOffset + placementPosition;
+            var actualPosition = placedItem.transform.position;
+            Debug.Log("Ladada");
+            Assert.AreEqual(expectedPosition, actualPosition);
+        
+            //CLEANUP - Scene reloaded in Setup
         }
 
         [Test]
@@ -113,7 +114,7 @@ namespace Tests.EditMode {
             GameObject placedItem = counterComponent.PlaceOnCounter(item);
             
             //ASSERT
-            var curBuyableObject = placedItem.GetComponent<BuyableObject>();
+            var curBuyableObject = placedItem.GetComponent<Buyable>();
             Assert.IsTrue(curBuyableObject.IsBought);
         
             //CLEANUP
@@ -134,9 +135,9 @@ namespace Tests.EditMode {
                 itemsToRemoveOnCleanUp.Add(placedItem);
             
                 //ASSERT
-                var curBuyableObject = placedItem.GetComponent<BuyableObject>();
-                Assert.AreEqual(curBuyableObject.ItemName, counterComponent.BoughtItems[i].ItemName);
-                Assert.AreEqual(curBuyableObject.Price, counterComponent.BoughtItems[i].Price);
+                var curBuyableObject = placedItem.GetComponent<Buyable>();
+                Assert.AreEqual(curBuyableObject.ItemName, counterComponent.BoughtItems[i].buyable.ItemName);
+                Assert.AreEqual(curBuyableObject.Price, counterComponent.BoughtItems[i].buyable.Price);
             }
         
             //CLEANUP
@@ -164,52 +165,7 @@ namespace Tests.EditMode {
             RemovePlacedItems(itemsToRemoveOnCleanUp);
             ResetCounterComponent();
         }
-        
-        /// <summary>
-        /// Place all items and remove a single one
-        /// </summary>
-        /// <param name="itemID"> The id of the item to remove. 0 to 4 as those are the first 5 assigned.</param>
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        public void RemoveFromCounter_with_full_counter_doesnt_change_other_items_on_counter(int itemID) {
-            //ARRANGE - place maxbuyable items, save positions, prices and names
-            //  (except of item to remove) and prepare cleanup
-            var maxBuyableItems = counterComponent.MaxBuyableItems;
-            var notRemovedItems = new List<GameObject>(maxBuyableItems);
-            var initialStates = 
-                new List<(string Name, float Price, Vector3 Pos)>(maxBuyableItems);
-            for (var i = 0; i < maxBuyableItems; i++) {
-                var placedItem = counterComponent.PlaceOnCounter(buyableItems[i]);
-                // dont add item that will be removed
-                if (i == itemID) continue;
-                // save to check for changes later
-                var curPrice = counterComponent.BoughtItems[i].Price;
-                var curName = counterComponent.BoughtItems[i].ItemName;
-                initialStates.Add((Name: curName, 
-                                        Price: curPrice, 
-                                        Pos: placedItem.transform.position));
-                // add to remove list
-                notRemovedItems.Add(placedItem);
-            }
-            //ACT - remove item with itemID, here 
-            counterComponent.RemoveItemFromCounter(itemID);
-            //ASSERT - positions, names, prices are the same
-            for (var i = 0; i < notRemovedItems.Count; i++) {
-                var item = notRemovedItems[i];
-                Assert.AreEqual( initialStates[i].Pos, item.transform.position);
-                var buyableObjectComponent = item.GetComponent<BuyableObject>();
-                Assert.AreEqual(initialStates[i].Name, buyableObjectComponent.ItemName);
-                Assert.AreEqual(initialStates[i].Price, buyableObjectComponent.Price);
-            }
-            //CLEANUP 
-            RemovePlacedItems(notRemovedItems);
-            ResetCounterComponent();
-        }
-        
-        
+
         /// <summary>
         /// Teardown Helper Method to remove the clone items spawned by PlaceOnCounter calls.
         /// </summary>

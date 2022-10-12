@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -40,16 +40,16 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
         //Count occurences of items in dict and calculate price
         //Store mapping of itemName to (pieces bought, price of one instance) in dict
         var itemCountDict = new Dictionary<string, (int, float)>(counter.MaxBuyableItems); 
-        foreach (BuyableObject buyableObject in counter.BoughtItems) {
-            var tmpName = buyableObject.ItemName;
+        foreach (Buyable buyable in counter.BoughtItems.Values.Select(t=>t.buyable)) {
+            var tmpName = buyable.ItemName;
             if(itemCountDict.ContainsKey(tmpName)) {
                 var countPriceTuple = itemCountDict[tmpName];
                 countPriceTuple.Item1 += 1;
                 itemCountDict[tmpName] = countPriceTuple;
             } else {
-                itemCountDict.Add(tmpName, (1, buyableObject.Price));
+                itemCountDict.Add(tmpName, (1, buyable.Price));
             }
-            totalPrice += buyableObject.Price;
+            totalPrice += buyable.Price;
         }
         
         //Build bill Message - item order is not guaranteed

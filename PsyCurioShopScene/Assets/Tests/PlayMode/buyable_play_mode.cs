@@ -9,9 +9,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 namespace Tests.PlayMode {
-    public class buyable_object_play_mode : InputTestFixture {
-        private GameObject[] buyableItems;
-        private BuyableObject[] buyableObjectComponents;
+    public class buyable_play_mode : InputTestFixture {
+        private GameObject[] buyableObjects;
+        private Buyable[] buyableComponents;
         private Camera camera;
         private Mouse mouse;
         private bool sceneIsLoaded;
@@ -47,8 +47,8 @@ namespace Tests.PlayMode {
         /// </summary>
         private void SetUpSharedReferences() {
             if (referencesAreSetUp) return;
-            buyableItems = GameObject.FindGameObjectsWithTag(Tags.Item);
-            buyableObjectComponents = buyableItems.Select(x => x.GetComponent<BuyableObject>()).ToArray();
+            buyableObjects = GameObject.FindGameObjectsWithTag(Tags.Item);
+            buyableComponents = buyableObjects.Select(x => x.GetComponent<Buyable>()).ToArray();
             // Get camera object
             camera = GameObject.FindWithTag(Tags.MainCamera).GetComponent<Camera>();
             referencesAreSetUp = true;
@@ -64,20 +64,20 @@ namespace Tests.PlayMode {
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
             // SetUp Substitute for the counter
-            for (var i = 0; i < buyableObjectComponents.Length; i++) {
-                var buyableObjectComponent = buyableObjectComponents[i];
+            for (var i = 0; i < buyableComponents.Length; i++) {
+                var buyableObjectComponent = buyableComponents[i];
                 var counterSubstitute = Substitute.For<ICounter>();
-                buyableObjectComponent.Counter = counterSubstitute;
-                buyableObjectComponent.Counter.PlaceOnCounter(buyableItems[i])
-                    .Returns(buyableItems[i]);
+                buyableObjectComponent.ResponsibleCounter = counterSubstitute;
+                buyableObjectComponent.ResponsibleCounter.PlaceOnCounter(buyableObjects[i])
+                    .Returns(buyableObjects[i]);
             }
 
             //ARRANGE 3 - Prepare usable mouse -> easy with Input System \o/
             mouse = InputSystem.AddDevice<Mouse>();
 
             //ACT - click on screen pos, that correlates to items world pos
-            for (int i = 0; i < buyableItems.Length; i++) {
-                var worldPos = buyableItems[i].transform.position;
+            for (int i = 0; i < buyableObjects.Length; i++) {
+                var worldPos = buyableObjects[i].transform.position;
                 Vector2 screenPos = camera.WorldToScreenPoint(worldPos);
                 Set(mouse.position, screenPos, queueEventOnly: false);
                 Press(mouse.leftButton);
@@ -87,10 +87,10 @@ namespace Tests.PlayMode {
 
                 //ASSERT
                 // Use Received method of Substitute to confirm exactly one call to PlaceOnCounter
-                buyableObjectComponents[i].Counter.Received(1).PlaceOnCounter(buyableItems[i]);
+                buyableComponents[i].ResponsibleCounter.Received(1).PlaceOnCounter(buyableObjects[i]);
 
                 //CLEANUP
-                buyableObjectComponents[i].Counter.ClearReceivedCalls();
+                buyableComponents[i].ResponsibleCounter.ClearReceivedCalls();
             }
         }
 
@@ -108,10 +108,10 @@ namespace Tests.PlayMode {
             mouse = InputSystem.AddDevice<Mouse>();
             //ARRANGE 4 - Buy all items once
             var boughtItems = new List<GameObject>();
-            var boughtItemComponents = new List<BuyableObject>();
-            foreach (var item in buyableItems) {
-                var counter = item.GetComponent<Counter>();
+            var counter = buyableObjects[0].GetComponent<Buyable>().ResponsibleCounter;
+            foreach (var item in buyableObjects) {
                 var placedItem = counter.PlaceOnCounter(item);
+                yield return null;
                 //Add only successfully placed items (for the case, there are
                 // more items to buy than slots on the counter)
                 if (placedItem != null) {
@@ -120,8 +120,8 @@ namespace Tests.PlayMode {
             }
             foreach (var item in boughtItems) {
                 //ARRANGE 5 - Place Substitute
-                var buyableObjectComponent = item.GetComponent<BuyableObject>();
-                buyableObjectComponent.Counter = Substitute.For<ICounter>();
+                var buyableObjectComponent = item.GetComponent<Buyable>();
+                buyableObjectComponent.ResponsibleCounter = Substitute.For<ICounter>();
                 
                 //ACT - click on screen pos, that correlates to items world pos
                 var worldPos = item.transform.position;
@@ -134,7 +134,7 @@ namespace Tests.PlayMode {
 
                 //ASSERT
                 // Confirm exactly one call to RemoveItemFromCounter with correct ID
-                buyableObjectComponent.Counter.Received(1).RemoveItemFromCounter(buyableObjectComponent.UniqueID);
+                buyableObjectComponent.ResponsibleCounter.Received(1).RemoveItemFromCounter(buyableObjectComponent);
 
                 //CLEANUP - done in TearDown and next Setup which reloads scene from scratch
             }
