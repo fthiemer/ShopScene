@@ -190,9 +190,28 @@ namespace Tests.EditMode {
             }
             //CLEANUP - not necessary as scene is reloaded in Setup
         }
-        
-        
-        
+
+        [Test]
+        public void Awake_fills_ItemSlots_list_in_order_of_childrenNames() {
+            //ARRANGE - Awake was called in Setup
+            //ACT - not necessary
+            //ASSERT
+            var expectedItemSlotObjects = new List<GameObject>(counterComponent.MaxBuyableItems);
+            var expectedItemSlots = new List<ItemSlot>(counterComponent.MaxBuyableItems);
+            int currentSlotIndex = 0;
+            foreach (Transform child in counterObject.transform.Cast<Transform>().OrderBy(t=>t.name)) {
+                var curItemSlot = child.GetComponent<ItemSlot>();
+                expectedItemSlots.Add(curItemSlot);
+                expectedItemSlotObjects.Add(child.gameObject);
+            }
+
+            for (int i = 0; i < counterComponent.ItemSlots.Count; i++) {
+                Assert.AreSame(expectedItemSlotObjects[i], counterComponent.ItemSlots[i].gameObject);
+                Assert.AreSame(expectedItemSlots[i], counterComponent.ItemSlots[i]);
+            }
+            //CLEANUP - done by teardown and setup
+        }
+
 
         /// <summary>
         /// Teardown Helper Method to remove the clone items spawned by PlaceOnCounter calls.

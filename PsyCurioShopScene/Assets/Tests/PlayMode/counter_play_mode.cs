@@ -47,8 +47,8 @@ namespace Tests.PlayMode {
             if (referencesAreSetUp) return;
             buyableObjects = GameObject.FindGameObjectsWithTag(Tags.Item);
             buyableComponents = buyableObjects.Select(x => x.GetComponent<Buyable>()).ToArray();
-            referencesAreSetUp = true;
             counterComponent = GameObject.FindGameObjectWithTag(Tags.Counter).GetComponent<Counter>();
+            referencesAreSetUp = true;
         }
 
         [UnityTest]
@@ -56,7 +56,6 @@ namespace Tests.PlayMode {
             //ARRANGE 0 - wait for scene to load in Setup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();
-            counterComponent = buyableComponents[0].ResponsibleCounter;
             //ARRANGE 1 - buy each buyable item once and add it to tracking list
             var boughtItems = new List<GameObject>(counterComponent.MaxBuyableItems);
             for (var i = 0; i < buyableObjects.Length; i++) {
@@ -75,14 +74,13 @@ namespace Tests.PlayMode {
             }
         }
 
-        // holds test cases for UnityTest
+        // holds test cases for following UnityTests
         static IEnumerable CaseSource {
-            get {
-                yield return new TestCaseData(0).Returns(null);
-                yield return new TestCaseData(1).Returns(null);
-                yield return new TestCaseData(2).Returns(null);
-                yield return new TestCaseData(3).Returns(null);
-                yield return new TestCaseData(4).Returns(null);
+            get { yield return new TestCaseData(0).Returns(null);
+                    yield return new TestCaseData(1).Returns(null);
+                    yield return new TestCaseData(2).Returns(null);
+                    yield return new TestCaseData(3).Returns(null);
+                    yield return new TestCaseData(4).Returns(null);
             }
         }
 
@@ -91,7 +89,7 @@ namespace Tests.PlayMode {
         /// </summary>
         /// <param name="slotIndexToRemoveFrom"> The slotIndex of the item to remove. 0 to 4 as there are 5 slots.</param>
         [UnityTest, TestCaseSource(nameof(CaseSource))]
-        public IEnumerator RemoveFromCounter_with_full_counter_doesnt_change_other_items_on_counter(
+        public IEnumerator RemoveItemFromCounter_with_full_counter_doesnt_change_other_items_on_counter(
                                 int slotIndexToRemoveFrom) {
             //ARRANGE 0 - wait for scene to load in Setup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
@@ -133,6 +131,81 @@ namespace Tests.PlayMode {
                 var buyableObjectComponent = item.GetComponent<Buyable>();
                 Assert.AreEqual(initialStates[i].Name, buyableObjectComponent.ItemName);
                 Assert.AreEqual(initialStates[i].Price, buyableObjectComponent.Price);
+            }
+        }
+
+        [UnityTest, TestCaseSource(nameof(CaseSource))]
+        public IEnumerator PlaceOnCounter_full_counter_after_item_was_removed_uses_freed_slot(int slotIndex) {
+            //ARRANGE 0 - wait for scene to load in Setup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+            //ARRANGE 1 - buy each buyable item once and add it to tracking list
+            var boughtItems = new List<GameObject>(counterComponent.MaxBuyableItems);
+            for (var i = 0; i < buyableObjects.Length; i++) {
+                boughtItems.Add(counterComponent.PlaceOnCounter(buyableObjects[i]));
+            }
+
+            //ACT - call remove object for item in slot with slotIndex, let 1 frame pass and rebuy
+            var curBuyable = boughtItems[slotIndex].GetComponent<Buyable>();
+            counterComponent.RemoveItemFromCounter(curBuyable);
+            yield return null;
+            var placedItem = counterComponent.PlaceOnCounter(buyableObjects[0]);
+            
+            //ASSERT - make sure item was placed in freed slot
+            Assert.AreSame(placedItem, counterComponent.ItemSlots[slotIndex].ObjectInSlot);
+        }
+        
+        static IEnumerable MultipleRemovedCaseSource {
+            get {
+                var slotIndexes = new List<int>() { 0, 1, 2, 3 };
+                yield return new TestCaseData(5, slotIndexes, 4).Returns(null);
+                slotIndexes = new List<int>() { 0, 4, 1, 3 };
+                yield return new TestCaseData(5, slotIndexes, 4).Returns(null); 
+                slotIndexes = new List<int>() { 0, 2, 1 };
+                yield return new TestCaseData(4, slotIndexes, 4).Returns(null);
+                slotIndexes = new List<int>() { 4, 0 };
+                yield return new TestCaseData(5, slotIndexes, 2).Returns(null);
+            }
+        }
+        
+        [UnityTest,TestCaseSource(nameof(MultipleRemovedCaseSource))]
+        public IEnumerator PlaceOnCounter_on_multiple_removed_items_uses_lowest_indexed_ItemSlot(
+                    int numItemsOnFirstBuy, List<int> SlotsToRemoveItemsFrom, int numItemsOnScndBuy) {
+            //ARRANGE 0 - wait for scene to load in Setup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+            //ARRANGE 1 - buy numItemsToBuyFirst items
+            var boughtItems = new List<GameObject>(counterComponent.MaxBuyableItems);
+            for (var i = 0; i < numItemsOnFirstBuy; i++) {
+                boughtItems.Add(counterComponent.PlaceOnCounter(
+                                                        buyableObjects[i % buyableObjects.Length]));
+            }
+
+            //ACT 1 - Remove Items from indexes in SlotsToRemoveItemsFrom
+            foreach (var slotIndex in SlotsToRemoveItemsFrom) {
+                var curBuyable = boughtItems[slotIndex].GetComponent<Buyable>();
+                counterComponent.RemoveItemFromCounter(curBuyable); 
+                yield return null;
+            }
+
+            //ACT 2 - Place numItemsOnScndBuy items
+            GameObject placedItem = null;
+            for (int i = 0; i < numItemsOnScndBuy; i++) {
+                //Determine the slot that should be used (slot with lowest sorting name in scene has
+                // highest priority)
+                ItemSlot targetSlot = null;
+                foreach (var slot in counterComponent.ItemSlots) {
+                    if (slot.SlotUsed) continue;
+                    targetSlot = slot;
+                    break;
+                }
+                // Place item
+                placedItem = counterComponent.PlaceOnCounter(buyableObjects[i % buyableObjects.Length]);
+                
+                //ASSERT - lowest indexed ItemSlot should be used
+                Assert.IsNotNull(placedItem);
+                Assert.IsNotNull(targetSlot);
+                Assert.AreSame(targetSlot.ObjectInSlot, placedItem.gameObject);
             }
         }
     }

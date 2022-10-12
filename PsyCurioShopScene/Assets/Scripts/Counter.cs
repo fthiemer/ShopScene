@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 
 public class Counter : MonoBehaviour, ICounter {
     public int MaxBuyableItems => maxBuyableItems;
+    
+    /// <summary>
+    /// List of item slots on counter, which hold references, positions and if there is an item in them.
+    /// Initialized in Awake from the children of this scripts GameObject.
+    /// </summary>
     public List<ItemSlot> ItemSlots => itemSlots;
+    
     /// <summary>
     /// Keeps a (gameObject, buyable) tuple of bought items, the key to access them is the index
     /// of the ItemSlot they are in.
@@ -14,10 +19,6 @@ public class Counter : MonoBehaviour, ICounter {
 
     private int maxBuyableItems;
     private Dictionary<int, (GameObject gameObject, Buyable buyable)> boughtItemsDict;
-    /// <summary>
-    /// List of item slots on counter, which hold references, positions and if there is an item in them.
-    /// Initialized in Awake from the children of this scripts GameObject.
-    /// </summary>
     private List<ItemSlot> itemSlots;
 
     private void Awake() {
@@ -74,8 +75,11 @@ public class Counter : MonoBehaviour, ICounter {
     /// </summary>
     /// <param name="buyableToRemove"> Buyable Component of bought item to remove. </param>
     public void RemoveItemFromCounter(Buyable buyableToRemove) {
+        // Make sure buyableToRemove has 
+        var itemSlot = buyableToRemove.ItemSlot;
+        if(itemSlot==null) Debug.LogError("RemoveItemFromCounter called on item without item slot.");
         // Remove from boughtItemsDict
-        boughtItemsDict.Remove(buyableToRemove.ItemSlot.Index);
+        boughtItemsDict.Remove(itemSlot.Index);
         // Destroy and empty slot
         buyableToRemove.ItemSlot.DestroyObject();
     }
