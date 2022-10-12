@@ -38,7 +38,6 @@ public class Counter : MonoBehaviour, ICounter {
         }
         //Initialize 
         boughtItemsDict = new Dictionary<int, (GameObject gameObject, Buyable buyable)>(maxBuyableItems);
-        
     }
 
     /// <summary>
@@ -67,6 +66,8 @@ public class Counter : MonoBehaviour, ICounter {
         
         // Update boughtItemsDict, then return placed object
         boughtItemsDict[targetSlot.Index] = (targetSlot.ObjectInSlot, targetSlot.BuyableComponentInSlot);
+        //Invoke OnBoughtItemsChange to actualize bill
+        CashRegister.OnBoughtItemsChange.Invoke();
         return tmpPlacedObject;
     }
 
@@ -78,9 +79,11 @@ public class Counter : MonoBehaviour, ICounter {
         // Make sure buyableToRemove has 
         var itemSlot = buyableToRemove.ItemSlot;
         if(itemSlot==null) Debug.LogError("RemoveItemFromCounter called on item without item slot.");
-        // Remove from boughtItemsDict
-        boughtItemsDict.Remove(itemSlot.Index);
         // Destroy and empty slot
         buyableToRemove.ItemSlot.DestroyObject();
+        // Remove from boughtItemsDict
+        boughtItemsDict.Remove(itemSlot.Index);
+        //Invoke OnBoughtItemsChange to actualize bill
+        CashRegister.OnBoughtItemsChange.Invoke();
     }
 }

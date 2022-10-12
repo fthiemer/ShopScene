@@ -37,9 +37,9 @@ public class Shopkeeper : MonoBehaviour, IPointerClickHandler, IShopkeeper {
     }
 
     /// <summary>
-    /// Activate the Speechbubble and display given string on it.
+    /// Display given string on speechbubble
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="text"> Text to display</param>
     public void Say(string text) {
         speechbubbleText.text = text;
     }

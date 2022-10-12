@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -10,10 +11,12 @@ using UnityEngine.EventSystems;
 /// Needs to access counter for list of bought items.
 /// </summary>
 public class CashRegister : MonoBehaviour, IPointerClickHandler {
-    [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
+    public static UnityEvent OnBoughtItemsChange = new UnityEvent();
     public ICounter counter;
     public IShopkeeper shopkeeper;
-
+    [SerializeField] private string zeroItemsBoughtMsg = "You chose: \n\nNothing. Nothing at all..";
+    private bool billRequested;
+    
     private void Awake() {
         gameObject.tag = Tags.CashRegister;
     }
@@ -24,9 +27,17 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
     }
 
     public void OnPointerClick (PointerEventData eventData) {
-        shopkeeper.Say(ConstructBillMessage());
+        ShowBill();
+        if (!billRequested) OnBoughtItemsChange.AddListener(ShowBill);
     }
 
+
+    private void ShowBill() {
+        shopkeeper.Say(ConstructBillMessage());
+    }
+    
+    
+    
     /// <summary>
     /// Constructs bill message from boughtItems.
     /// </summary>
@@ -69,6 +80,6 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
                         $" Robodollars you can take {summaryWord} with you.");
         return billText.ToString();
     }
-    
+
 
 }
