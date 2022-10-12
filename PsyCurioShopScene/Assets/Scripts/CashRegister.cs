@@ -28,12 +28,14 @@ public class CashRegister : MonoBehaviour, IPointerClickHandler {
 
     public void OnPointerClick (PointerEventData eventData) {
         ShowBill();
-        if (!billRequested) OnBoughtItemsChange.AddListener(ShowBill);
     }
 
 
     private void ShowBill() {
         shopkeeper.Say(ConstructBillMessage());
+        if (billRequested) return;
+        OnBoughtItemsChange.AddListener(ShowBill);
+        billRequested = true;
     }
     
     

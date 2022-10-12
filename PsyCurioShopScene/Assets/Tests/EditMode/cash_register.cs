@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using NSubstitute;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode {
     public class cash_register {
@@ -87,6 +90,39 @@ namespace Tests.EditMode {
             Assert.AreEqual(totalPriceString, billMessageTotalPriceString);
 
             //CLEANUP - not necessary, as SetUp Reinitializes Scene
+        }
+
+        [Test]
+        public void Counter_PlaceOnCounter_if_CashRegister_clicked_triggers_speechbubble_update() {
+            //ARRANGE - Set up substitute and click cash register to set into bill update mode
+            var shopkeeperSubstitute = Substitute.For<IShopkeeper>();
+            cashRegisterComponent.shopkeeper = shopkeeperSubstitute;
+            cashRegisterComponent.OnPointerClick(null);
+            //ACT - place Item on counter
+            cashRegisterComponent.counter.PlaceOnCounter(buyableObjects[0]);
+            //ASSERT - 
+            // Get bill message corresponding to current scene state
+            string billMessage = ReflectionHelper.InvokePrivateNonVoidMethod<string>(cashRegisterComponent, 
+                "ConstructBillMessage") as string;
+            cashRegisterComponent.shopkeeper.Received(1).Say(billMessage);
+            //CLEANUP - Setup Reinitializes Scene
+            cashRegisterComponent.shopkeeper.ClearReceivedCalls();
+        }
+        
+        [Test]
+        public void Counter_PlaceOnCounter_if_CashRegister_not_clicked_doesnt_trigger_speechbubble_update() {
+            //ARRANGE - Set up substitute and click cash register to set into bill update mode
+            var shopkeeperSubstitute = Substitute.For<IShopkeeper>();
+            cashRegisterComponent.shopkeeper = shopkeeperSubstitute;
+            //ACT - place Item on counter
+            cashRegisterComponent.counter.PlaceOnCounter(buyableObjects[0]);
+            //ASSERT - 
+            // Get bill message corresponding to current scene state
+            string billMessage = ReflectionHelper.InvokePrivateNonVoidMethod<string>(cashRegisterComponent, 
+                "ConstructBillMessage") as string;
+            cashRegisterComponent.shopkeeper.Received(0).Say(billMessage);
+            //CLEANUP - Setup Reinitializes Scene
+            cashRegisterComponent.shopkeeper.ClearReceivedCalls();
         }
     }
 }

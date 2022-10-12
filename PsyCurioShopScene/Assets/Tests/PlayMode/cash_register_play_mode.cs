@@ -85,5 +85,50 @@ namespace Tests.PlayMode {
             //CLEANUP
             cashRegisterComponent.shopkeeper.ClearReceivedCalls();
         }
+        
+        [UnityTest]
+        public IEnumerator Counter_RemoveItemFromCounter_if_CashRegister_clicked_triggers_speechbubble_update() {
+            //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+            //ARRANGE 2 - Set up substitute, place item and click cash register to set into bill update mode
+            var shopkeeperSubstitute = Substitute.For<IShopkeeper>();
+            cashRegisterComponent.shopkeeper = shopkeeperSubstitute;
+            var itemToBuy = GameObject.FindWithTag(Tags.Item);
+            var boughtItem = cashRegisterComponent.counter.PlaceOnCounter(itemToBuy);
+            cashRegisterComponent.OnPointerClick(null);
+            //ACT 
+            cashRegisterComponent.counter.RemoveItemFromCounter(boughtItem.GetComponent<Buyable>());
+            yield return null;
+            //ASSERT
+            // Get bill message corresponding to current scene state (no items bought)
+            string billMessage = ReflectionHelper.InvokePrivateNonVoidMethod<string>(cashRegisterComponent, 
+                "ConstructBillMessage") as string;
+            cashRegisterComponent.shopkeeper.Received(1).Say(billMessage);
+            //CLEANUP - Setup Reinitializes Scene
+            cashRegisterComponent.shopkeeper.ClearReceivedCalls();
+        }
+        
+        [UnityTest]
+        public IEnumerator Counter_RemoveItemFromCounter_if_CashRegister_not_clicked_doesnt_trigger_speechbubble_update() {
+            //ARRANGE 1 - wait for scene to load in OneTimeSetup, then set up references if not done yet
+            yield return new WaitUntil(() => sceneIsLoaded);
+            SetUpSharedReferences();
+            //ARRANGE 2 - Set up substitute, place item and click cash register to set into bill update mode
+            var shopkeeperSubstitute = Substitute.For<IShopkeeper>();
+            cashRegisterComponent.shopkeeper = shopkeeperSubstitute;
+            var itemToBuy = GameObject.FindWithTag(Tags.Item);
+            var boughtItem = cashRegisterComponent.counter.PlaceOnCounter(itemToBuy);
+            //ACT 
+            cashRegisterComponent.counter.RemoveItemFromCounter(boughtItem.GetComponent<Buyable>());
+            yield return null;
+            //ASSERT
+            // Get bill message corresponding to current scene state (no items bought)
+            string billMessage = ReflectionHelper.InvokePrivateNonVoidMethod<string>(cashRegisterComponent, 
+                "ConstructBillMessage") as string;
+            cashRegisterComponent.shopkeeper.Received(0).Say(billMessage);
+            //CLEANUP - Setup Reinitializes Scene
+            cashRegisterComponent.shopkeeper.ClearReceivedCalls();
+        }
     }
 }
