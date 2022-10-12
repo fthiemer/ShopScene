@@ -166,6 +166,34 @@ namespace Tests.EditMode {
             ResetCounterComponent();
         }
 
+        [Test]
+        public void PlaceOnCounter_places_maxBuyableItems_in_correct_order() {
+            //ARRANGE
+            var placedItems = new List<GameObject>(counterComponent.MaxBuyableItems);
+
+            //ACT - buy maxBuyableItems
+            int i;
+            for (i = 0; i < counterComponent.MaxBuyableItems; i++) {
+                // If MaxBuyableItems is bigger than 
+                int itemIndex = i % buyableItems.Length;
+                placedItems.Add(counterComponent.PlaceOnCounter(buyableItems[itemIndex]));
+            }
+            
+            //ASSERT - iterate over ItemSlots (child of countergameobject) sorted after name
+            // and items in the ItemSlot component should be in the same order as in placedItems
+            i = 0;
+            foreach (Transform child in counterObject.transform.Cast<Transform>()
+                                                            .OrderBy(t => t.name)) {
+                var itemSlot = child.GetComponent<ItemSlot>();
+                Assert.AreSame(placedItems[i], itemSlot.ObjectInSlot);
+                i++;
+            }
+            //CLEANUP - not necessary as scene is reloaded in Setup
+        }
+        
+        
+        
+
         /// <summary>
         /// Teardown Helper Method to remove the clone items spawned by PlaceOnCounter calls.
         /// </summary>
