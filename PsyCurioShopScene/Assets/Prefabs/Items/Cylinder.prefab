@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4624019071380491962}
   - component: {fileID: 4624019071380491961}
   - component: {fileID: 4624019071380491940}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 318b9d4becefbab44af5ad1ce50efc4a, type: 2}
+  - {fileID: 2100000, guid: abf696dfa7cf00a4d8a11b83a4f13259, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,9 +96,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
-  m_Height: 2
+  m_Height: 2.2070189
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.00000004967054, y: 0.103509225, z: -0.00000009934107}
 --- !u!114 &4624019071380491940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,5 +111,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Cylinder
   price: 8.88
+  itemName: Crystal Cylinder

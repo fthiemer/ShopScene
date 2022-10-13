@@ -100,7 +100,7 @@ namespace Tests.PlayMode {
         /// Counter.RemoveItemFromCounter on click.
         /// </summary>
         [UnityTest]
-        public IEnumerator ShopScene_click_on_bought_items_calls_RemoveItemFromCounter_with_items_ID() {
+        public IEnumerator ShopScene_click_on_bought_items_calls_RemoveItemFromCounter() {
             //ARRANGE 2 - wait for scene to load in Setup, then set up references if not done yet
             yield return new WaitUntil(() => sceneIsLoaded);
             SetUpSharedReferences();

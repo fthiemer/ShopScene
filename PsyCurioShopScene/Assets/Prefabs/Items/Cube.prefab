@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 174122941339487634}
   - component: {fileID: 174122941339487635}
   - component: {fileID: 174122941339487628}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 318b9d4becefbab44af5ad1ce50efc4a, type: 2}
+  - {fileID: 2100000, guid: 9c1b7804564b76e429fda545ab99503b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,5 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Cube
-  price: 11
+  price: 1234.5
+  itemName: Mysterious Cube

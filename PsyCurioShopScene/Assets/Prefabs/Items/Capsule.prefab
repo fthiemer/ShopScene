@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1612252974965819795}
   - component: {fileID: 1612252974965819796}
   - component: {fileID: 1612252974965819793}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Capsule
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 318b9d4becefbab44af5ad1ce50efc4a, type: 2}
+  - {fileID: 2100000, guid: e89895094cd631c4b938cc81f1e75b31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,5 +111,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Capsule
   price: 3
+  itemName: Ruby Capsule

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 20984028986686624}
   - component: {fileID: 20984028986686639}
   - component: {fileID: 20984028986686626}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: FlatSphere
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 318b9d4becefbab44af5ad1ce50efc4a, type: 2}
+  - {fileID: 2100000, guid: 71ad38e027a372b41ab93252fdeeb2d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,5 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92204a3597246fd4192a0d271a3e5c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Big M&M
-  price: 1
+  price: 1.35
+  itemName: Smaragd Smartie

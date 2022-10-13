@@ -3233,35 +3233,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1983001949}
     m_Modifications:
-    - target: {fileID: 20984028986686624, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
-        type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 20984028986686624, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 71ad38e027a372b41ab93252fdeeb2d2, type: 2}
-    - target: {fileID: 20984028986686626, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
-        type: 3}
-      propertyPath: price
-      value: 1.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 20984028986686626, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
-        type: 3}
-      propertyPath: itemName
-      value: Smaragd Smartie
-      objectReference: {fileID: 0}
     - target: {fileID: 20984028986686637, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
         type: 3}
       propertyPath: m_Name
       value: Smartie
-      objectReference: {fileID: 0}
-    - target: {fileID: 20984028986686637, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20984028986686638, guid: 5f378f6aff02b4e4b9c82a13f1ff23f5,
         type: 3}
@@ -3327,16 +3302,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1983001949}
     m_Modifications:
-    - target: {fileID: 174122941339487628, guid: b6a639e89993cf54286becc13f5c7cef,
-        type: 3}
-      propertyPath: price
-      value: 1234.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 174122941339487628, guid: b6a639e89993cf54286becc13f5c7cef,
-        type: 3}
-      propertyPath: itemName
-      value: Mysterious Cube
-      objectReference: {fileID: 0}
     - target: {fileID: 174122941339487632, guid: b6a639e89993cf54286becc13f5c7cef,
         type: 3}
       propertyPath: m_RootOrder
@@ -3397,21 +3362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
-    - target: {fileID: 174122941339487633, guid: b6a639e89993cf54286becc13f5c7cef,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 174122941339487634, guid: b6a639e89993cf54286becc13f5c7cef,
-        type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 174122941339487634, guid: b6a639e89993cf54286becc13f5c7cef,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 9c1b7804564b76e429fda545ab99503b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6a639e89993cf54286becc13f5c7cef, type: 3}
 --- !u!1001 &1044174787935850211
@@ -3421,16 +3371,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1983001949}
     m_Modifications:
-    - target: {fileID: 1044174787391260432, guid: fe6af38ff9eeb694e8f53c17384cd570,
-        type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1044174787391260432, guid: fe6af38ff9eeb694e8f53c17384cd570,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 063ed5449ac20664c8d2aa1feeac3e09, type: 2}
     - target: {fileID: 1044174787391260434, guid: fe6af38ff9eeb694e8f53c17384cd570,
         type: 3}
       propertyPath: m_RootOrder
@@ -3491,16 +3431,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sphere
       objectReference: {fileID: 0}
-    - target: {fileID: 1044174787391260435, guid: fe6af38ff9eeb694e8f53c17384cd570,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1044174787391260438, guid: fe6af38ff9eeb694e8f53c17384cd570,
-        type: 3}
-      propertyPath: itemName
-      value: Platin Sphere
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe6af38ff9eeb694e8f53c17384cd570, type: 3}
 --- !u!1001 &1612252973331034319
@@ -3510,26 +3440,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1983001949}
     m_Modifications:
-    - target: {fileID: 1612252974965819793, guid: 5c8651eb8ab17e746955fbd04b375d94,
-        type: 3}
-      propertyPath: price
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1612252974965819793, guid: 5c8651eb8ab17e746955fbd04b375d94,
-        type: 3}
-      propertyPath: itemName
-      value: Ruby Capsule
-      objectReference: {fileID: 0}
-    - target: {fileID: 1612252974965819795, guid: 5c8651eb8ab17e746955fbd04b375d94,
-        type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1612252974965819795, guid: 5c8651eb8ab17e746955fbd04b375d94,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: e89895094cd631c4b938cc81f1e75b31, type: 2}
     - target: {fileID: 1612252974965819797, guid: 5c8651eb8ab17e746955fbd04b375d94,
         type: 3}
       propertyPath: m_RootOrder
@@ -3590,11 +3500,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsule
       objectReference: {fileID: 0}
-    - target: {fileID: 1612252974965819798, guid: 5c8651eb8ab17e746955fbd04b375d94,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c8651eb8ab17e746955fbd04b375d94, type: 3}
 --- !u!1001 &4624019071337084308
@@ -3604,11 +3509,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1983001949}
     m_Modifications:
-    - target: {fileID: 4624019071380491940, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: itemName
-      value: Crystal Cylinder
-      objectReference: {fileID: 0}
     - target: {fileID: 4624019071380491960, guid: 31615a76a880f2645809714e2cdf2432,
         type: 3}
       propertyPath: m_RootOrder
@@ -3664,45 +3564,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491961, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Height
-      value: 2.2070189
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491961, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0.00000004967054
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491961, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.103509225
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491961, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.00000009934107
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491962, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491962, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: abf696dfa7cf00a4d8a11b83a4f13259, type: 2}
     - target: {fileID: 4624019071380491967, guid: 31615a76a880f2645809714e2cdf2432,
         type: 3}
       propertyPath: m_Name
       value: Cylinder
-      objectReference: {fileID: 0}
-    - target: {fileID: 4624019071380491967, guid: 31615a76a880f2645809714e2cdf2432,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31615a76a880f2645809714e2cdf2432, type: 3}
